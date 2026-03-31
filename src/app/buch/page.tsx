@@ -434,7 +434,7 @@ export default function BuchLandingPage() {
                     "3 Geschichten: Traurigkeit, Wut & Freude",
                     "Gezielte Reflexionsfragen",
                     "100% handgemalt & handgeschrieben",
-                    "Empfohlenes Alter: 3–8 Jahre",
+                    "Empfohlenes Alter: 6–10 Jahre",
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-2">
                       <Check className="h-4 w-4 text-sage shrink-0" />

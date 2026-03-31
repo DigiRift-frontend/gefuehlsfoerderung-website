@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Caveat, Nunito } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
@@ -19,6 +19,13 @@ const nunito = Nunito({
   subsets: ["latin"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://gefühlsförderung.de"),

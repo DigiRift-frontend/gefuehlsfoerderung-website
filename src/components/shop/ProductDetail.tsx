@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   ShoppingBag,
   Check,
@@ -47,6 +47,26 @@ export function ProductDetail({
   const [selectedImage, setSelectedImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const touchStartX = useRef(0);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        setSelectedImage((prev) =>
+          prev === product.images.length - 1 ? 0 : prev + 1
+        );
+      } else {
+        setSelectedImage((prev) =>
+          prev === 0 ? product.images.length - 1 : prev - 1
+        );
+      }
+    }
+  }
   const Icon = categoryIcons[product.category];
   const color = categoryColors[product.category];
   const { addToCart, setCartOpen } = useCart();
@@ -84,6 +104,8 @@ export function ProductDetail({
             <div className="space-y-4">
               <div
                 className={`aspect-square bg-gradient-to-br ${color} rounded-3xl flex items-center justify-center relative border border-lavender/10 overflow-hidden group`}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
                 {product.images.length > 0 ? (
                   <Image
@@ -114,7 +136,7 @@ export function ProductDetail({
                 {product.images.length > 0 && (
                   <button
                     onClick={() => setLightboxOpen(true)}
-                    className="absolute bottom-4 right-4 z-10 bg-white/80 hover:bg-white text-charcoal p-2 rounded-xl shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    className="absolute bottom-4 right-4 z-10 bg-white/80 hover:bg-white text-charcoal p-2 rounded-xl shadow-sm opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200"
                     aria-label="Bild vergrößern"
                   >
                     <ZoomIn className="h-5 w-5" />
@@ -130,7 +152,7 @@ export function ProductDetail({
                           prev === 0 ? product.images.length - 1 : prev - 1
                         )
                       }
-                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-charcoal p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-charcoal p-2 rounded-full shadow-sm opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200"
                       aria-label="Vorheriges Bild"
                     >
                       <ChevronLeft className="h-5 w-5" />
@@ -141,7 +163,7 @@ export function ProductDetail({
                           prev === product.images.length - 1 ? 0 : prev + 1
                         )
                       }
-                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-charcoal p-2 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-charcoal p-2 rounded-full shadow-sm opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200"
                       aria-label="Nächstes Bild"
                     >
                       <ChevronRight className="h-5 w-5" />
@@ -252,7 +274,7 @@ export function ProductDetail({
                 <button
                   onClick={handleAddToCart}
                   disabled={!product.inStock}
-                  className={`flex-1 flex items-center justify-center gap-2 font-semibold py-4 rounded-2xl transition-colors text-lg ${
+                  className={`flex-1 flex items-center justify-center gap-2 font-semibold py-4 rounded-2xl transition-all active:scale-[0.97] text-lg ${
                     addedToCart
                       ? "bg-sage-dark text-white"
                       : product.inStock
@@ -387,6 +409,8 @@ export function ProductDetail({
           <div
             className="relative max-w-4xl w-full mx-4 aspect-square"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             <Image
               src={product.images[selectedImage]}
@@ -414,7 +438,7 @@ export function ProductDetail({
                       prev === 0 ? product.images.length - 1 : prev - 1
                     )
                   }
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-14 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
+                  className="absolute left-2 md:left-0 top-1/2 -translate-y-1/2 md:-translate-x-14 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
                   aria-label="Vorheriges Bild"
                 >
                   <ChevronLeft className="h-6 w-6" />
@@ -425,7 +449,7 @@ export function ProductDetail({
                       prev === product.images.length - 1 ? 0 : prev + 1
                     )
                   }
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-14 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
+                  className="absolute right-2 md:right-0 top-1/2 -translate-y-1/2 md:translate-x-14 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors"
                   aria-label="Nächstes Bild"
                 >
                   <ChevronRight className="h-6 w-6" />

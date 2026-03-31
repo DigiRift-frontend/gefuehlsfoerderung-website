@@ -46,7 +46,7 @@ export function BlogArticle({
         </h1>
 
         {/* Author + Meta */}
-        <div className="mt-6 flex items-center gap-4">
+        <div className="mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
           <Link href="/ueber-ewelina" className="shrink-0">
             <div className="w-11 h-11 rounded-full overflow-hidden relative border-2 border-lavender/15 shadow-sm">
               <Image
@@ -69,8 +69,8 @@ export function BlogArticle({
               Kindheitspädagogin B.A.
             </p>
           </div>
-          <span className="h-5 w-px bg-charcoal/10" />
-          <div className="flex items-center gap-4 text-sm text-charcoal-lighter">
+          <span className="hidden sm:block h-5 w-px bg-charcoal/10" />
+          <div className="flex items-center gap-3 sm:gap-4 text-sm text-charcoal-lighter">
             <span className="flex items-center gap-1.5">
               <Calendar className="h-4 w-4" />
               {formatDate(post.date)}
@@ -106,7 +106,7 @@ export function BlogArticle({
       <div className="mx-auto max-w-3xl px-4 sm:px-6 mt-10">
         <div
           className="
-            prose prose-lg max-w-none
+            prose md:prose-lg max-w-none
             prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-charcoal
             prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4
             prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3

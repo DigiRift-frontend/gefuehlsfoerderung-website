@@ -24,7 +24,7 @@ export function ShareButtons({ slug, title }: { slug: string; title: string }) {
         href={`https://wa.me/?text=${text}%20${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-9 h-9 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark transition-colors"
+        className="flex items-center justify-center w-11 h-11 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark active:scale-95 transition-all"
         aria-label="Auf WhatsApp teilen"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@ export function ShareButtons({ slug, title }: { slug: string; title: string }) {
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-9 h-9 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark transition-colors"
+        className="flex items-center justify-center w-11 h-11 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark active:scale-95 transition-all"
         aria-label="Auf Facebook teilen"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -46,7 +46,7 @@ export function ShareButtons({ slug, title }: { slug: string; title: string }) {
         href={`https://twitter.com/intent/tweet?text=${text}&url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-9 h-9 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark transition-colors"
+        className="flex items-center justify-center w-11 h-11 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark active:scale-95 transition-all"
         aria-label="Auf X teilen"
       >
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@ export function ShareButtons({ slug, title }: { slug: string; title: string }) {
       </a>
       <button
         onClick={copyLink}
-        className="flex items-center justify-center w-9 h-9 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark transition-colors"
+        className="flex items-center justify-center w-11 h-11 rounded-full bg-lavender/10 text-charcoal-light hover:bg-lavender/20 hover:text-lavender-dark active:scale-95 transition-all"
         aria-label="Link kopieren"
       >
         {copied ? (

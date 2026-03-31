@@ -39,7 +39,7 @@ export const products: Product[] = [
       "/images/products/book-spread.png",
     ],
     badge: "Bestseller",
-    ageRange: "3-8 Jahre",
+    ageRange: "6-10 Jahre",
     features: [
       "100% handgemalte Illustrationen",
       "Gezielte Reflexionsfragen zu jeder Geschichte",

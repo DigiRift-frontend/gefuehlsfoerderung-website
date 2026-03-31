@@ -41,7 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <div className="group bg-white rounded-3xl overflow-hidden border border-lavender/10 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col">
+    <div className="group bg-white rounded-3xl overflow-hidden border border-lavender/10 hover:shadow-xl active:scale-[0.98] transition-all duration-300 hover:-translate-y-1 flex flex-col">
       {/* Image Area */}
       <Link href={`/shop/${product.slug}`} className="block">
         <div
@@ -116,7 +116,7 @@ export function ProductCard({ product }: { product: Product }) {
         <button
           onClick={handleAddToCart}
           disabled={!product.inStock}
-          className={`mt-3 w-full flex items-center justify-center gap-2 font-semibold py-3 rounded-2xl transition-colors text-sm ${
+          className={`mt-3 w-full flex items-center justify-center gap-2 font-semibold py-3 rounded-2xl transition-all active:scale-[0.97] text-sm ${
             added
               ? "bg-sage-dark text-white"
               : product.inStock

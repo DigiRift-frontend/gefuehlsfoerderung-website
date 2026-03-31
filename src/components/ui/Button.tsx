@@ -33,7 +33,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const classes = cn(
-    "inline-flex items-center justify-center font-semibold rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-lavender/50 focus:ring-offset-2 focus:ring-offset-cream",
+    "inline-flex items-center justify-center font-semibold rounded-2xl transition-all duration-200 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-lavender/50 focus:ring-offset-2 focus:ring-offset-cream",
     variants[variant],
     sizes[size],
     className
