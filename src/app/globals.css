@@ -1,26 +1,78 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@plugin "@tailwindcss/typography";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: #FFF8F0;
+  --color-cream-dark: #F0E6D6;
+  --color-lavender: #9B7FBF;
+  --color-lavender-light: #C4B3D9;
+  --color-lavender-dark: #7B5FA0;
+  --color-rose: #E8A0B0;
+  --color-rose-light: #F5C6D0;
+  --color-rose-dark: #C4707E;
+  --color-gold: #E8B84D;
+  --color-gold-light: #FFD685;
+  --color-gold-dark: #C49030;
+  --color-sage: #5A9E6E;
+  --color-sage-light: #7DB88F;
+  --color-sage-dark: #3D7A50;
+  --color-charcoal: #1A1A1A;
+  --color-charcoal-light: #3D3D3D;
+  --color-charcoal-lighter: #666666;
+
+  --font-heading: var(--font-caveat);
+  --font-body: var(--font-nunito);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-body), system-ui, sans-serif;
 }
+
+::selection {
+  background-color: var(--color-lavender-light);
+  color: var(--color-charcoal);
+}
+
+/* Aquarell-Texturen */
+.watercolor-bg {
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(184, 169, 201, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(245, 198, 208, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 214, 133, 0.06) 0%, transparent 50%);
+}
+
+.watercolor-blob {
+  filter: blur(40px);
+  opacity: 0.15;
+  border-radius: 50%;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Dezente Page-Fade-Animation für Server Components */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+/* Staggered delays für Kinder-Elemente */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }

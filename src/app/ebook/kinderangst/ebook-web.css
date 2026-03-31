@@ -1,0 +1,688 @@
+/* ========== Web-Style E-Book (Website Design) ========== */
+
+.wb-wrapper {
+  font-family: var(--font-body), "Nunito", system-ui, sans-serif;
+  color: #1A1A1A;
+}
+
+/* --- Page --- */
+.wb-page {
+  position: relative;
+  width: 210mm;
+  margin: 0 auto 2rem;
+  min-height: 297mm;
+  background: #FFF8F0;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  page-break-after: always;
+  break-after: page;
+}
+
+/* ========== COVER ========== */
+.wb-cover {
+  background: linear-gradient(135deg, #F3EEF8 0%, #FFF8F0 40%, #FDE8EC 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30mm 25mm;
+  height: 297mm;
+  box-sizing: border-box;
+}
+.wb-cover-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(155, 127, 191, 0.12);
+  color: #7B5FA0;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8mm;
+}
+.wb-cover-title {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 48pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  line-height: 1.1;
+  margin: 0 0 6mm;
+  max-width: 160mm;
+}
+.wb-cover-subtitle {
+  font-size: 12pt;
+  color: #3D3D3D;
+  line-height: 1.6;
+  max-width: 140mm;
+  margin-bottom: 10mm;
+}
+.wb-cover-image {
+  position: relative;
+  width: 70mm;
+  height: 70mm;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid rgba(155, 127, 191, 0.15);
+  margin-bottom: 10mm;
+}
+.wb-cover-author {
+  font-size: 9pt;
+  color: #666;
+  letter-spacing: 0.08em;
+}
+.wb-cover-author strong {
+  color: #7B5FA0;
+  font-weight: 700;
+}
+.wb-cover-deco-1,
+.wb-cover-deco-2,
+.wb-cover-deco-3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+.wb-cover-deco-1 { width: 200px; height: 200px; background: #9B7FBF; top: -60px; left: -40px; }
+.wb-cover-deco-2 { width: 160px; height: 160px; background: #E8A0B0; bottom: -40px; right: -30px; }
+.wb-cover-deco-3 { width: 120px; height: 120px; background: #E8B84D; top: 40%; right: -50px; }
+
+/* ========== TOC ========== */
+.wb-toc {
+  padding: 25mm 22mm;
+  height: 297mm;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.wb-toc-header {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 36pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 10mm;
+}
+.wb-toc-sub {
+  font-size: 10pt;
+  color: #666;
+  margin-bottom: 10mm;
+  line-height: 1.6;
+}
+.wb-toc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5mm;
+}
+.wb-toc-item {
+  display: flex;
+  align-items: center;
+  gap: 4mm;
+  padding: 3mm 4mm;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+.wb-toc-item:nth-child(odd) {
+  background: rgba(155, 127, 191, 0.05);
+}
+.wb-toc-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9mm;
+  height: 9mm;
+  border-radius: 10px;
+  font-size: 9pt;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.wb-toc-item:nth-child(5n+1) .wb-toc-num { background: rgba(155,127,191,0.12); color: #7B5FA0; }
+.wb-toc-item:nth-child(5n+2) .wb-toc-num { background: rgba(232,160,176,0.15); color: #C4707E; }
+.wb-toc-item:nth-child(5n+3) .wb-toc-num { background: rgba(232,184,77,0.12); color: #C49030; }
+.wb-toc-item:nth-child(5n+4) .wb-toc-num { background: rgba(90,158,110,0.12); color: #3D7A50; }
+.wb-toc-item:nth-child(5n+5) .wb-toc-num { background: rgba(155,127,191,0.12); color: #7B5FA0; }
+.wb-toc-text {
+  flex: 1;
+}
+.wb-toc-title {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+.wb-toc-desc {
+  font-size: 7.5pt;
+  color: #666;
+  margin-top: 0.5mm;
+}
+
+/* ========== CHAPTER OPENER ========== */
+.wb-chapter-open {
+  height: 297mm;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.wb-chapter-hero {
+  position: relative;
+  height: 55%;
+  overflow: hidden;
+}
+.wb-chapter-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,248,240,0) 50%, #FFF8F0 100%);
+  z-index: 1;
+}
+.wb-chapter-info {
+  flex: 1;
+  padding: 0 25mm 20mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  margin-top: -15mm;
+}
+.wb-chapter-num-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14mm;
+  height: 14mm;
+  border-radius: 14px;
+  font-size: 14pt;
+  font-weight: 800;
+  margin-bottom: 5mm;
+}
+.wb-chapter-open:nth-of-type(5n+3) .wb-chapter-num-badge { background: rgba(155,127,191,0.12); color: #7B5FA0; }
+.wb-chapter-open:nth-of-type(5n+4) .wb-chapter-num-badge { background: rgba(232,160,176,0.15); color: #C4707E; }
+.wb-chapter-open:nth-of-type(5n+5) .wb-chapter-num-badge { background: rgba(232,184,77,0.12); color: #C49030; }
+.wb-chapter-open:nth-of-type(5n+6) .wb-chapter-num-badge { background: rgba(90,158,110,0.12); color: #3D7A50; }
+.wb-chapter-open:nth-of-type(5n+7) .wb-chapter-num-badge { background: rgba(155,127,191,0.12); color: #7B5FA0; }
+.wb-chapter-h {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 32pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  line-height: 1.1;
+  margin: 0 0 3mm;
+}
+.wb-chapter-sub {
+  font-size: 10pt;
+  color: #3D3D3D;
+  line-height: 1.5;
+  max-width: 140mm;
+}
+
+/* ========== CONTENT PAGE ========== */
+.wb-content {
+  padding: 18mm 22mm 25mm;
+  height: 297mm;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.wb-content-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #7B5FA0;
+  background: rgba(155,127,191,0.08);
+  padding: 3px 10px;
+  border-radius: 50px;
+  margin-bottom: 5mm;
+}
+.wb-content-body {
+  columns: 2;
+  column-gap: 8mm;
+  font-size: 9pt;
+  line-height: 1.8;
+  color: #3D3D3D;
+  hyphens: auto;
+}
+.wb-content-body h4 {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 15pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin: 5mm 0 2mm;
+  break-after: avoid;
+}
+.wb-content-body p {
+  margin: 0 0 3mm;
+  orphans: 3;
+  widows: 3;
+}
+
+/* Highlight = quote card */
+.wb-content-body .wb-quote {
+  background: linear-gradient(135deg, rgba(155,127,191,0.08), rgba(232,160,176,0.08));
+  border-radius: 14px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  font-style: italic;
+  font-size: 9.5pt;
+  color: #1A1A1A;
+  line-height: 1.7;
+  border-left: 3px solid #9B7FBF;
+  break-inside: avoid;
+}
+
+/* Tip = card */
+.wb-content-body .wb-card {
+  background: white;
+  border-radius: 16px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  border: 1px solid rgba(155,127,191,0.1);
+  break-inside: avoid;
+}
+.wb-content-body .wb-card-label {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #9B7FBF;
+  margin-bottom: 2mm;
+}
+.wb-content-body ul, .wb-content-body ol {
+  padding-left: 5mm;
+  margin: 2mm 0 3mm;
+}
+.wb-content-body li {
+  margin-bottom: 1.5mm;
+}
+
+/* ========== INTERACTIVE ELEMENTS ========== */
+
+/* --- Worksheet (lines for writing) --- */
+.wb-content-body .wb-worksheet {
+  background: white;
+  border-radius: 16px;
+  padding: 5mm 5mm 3mm;
+  margin: 4mm 0;
+  border: 1.5px dashed rgba(155,127,191,0.25);
+  break-inside: avoid;
+}
+.wb-worksheet-label {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #C49030;
+  margin-bottom: 3mm;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+.wb-worksheet-label::before {
+  content: "✏️";
+  font-size: 11pt;
+}
+.wb-worksheet-prompt {
+  font-size: 8.5pt;
+  color: #3D3D3D;
+  margin-bottom: 2.5mm;
+  font-style: italic;
+}
+.wb-worksheet-line {
+  border-bottom: 1px solid rgba(155,127,191,0.2);
+  height: 7mm;
+  width: 100%;
+}
+.wb-worksheet-line-sm {
+  border-bottom: 1px solid rgba(155,127,191,0.2);
+  height: 5.5mm;
+  width: 100%;
+}
+
+/* --- Checklist --- */
+.wb-content-body .wb-checklist {
+  background: linear-gradient(135deg, rgba(90,158,110,0.06), rgba(90,158,110,0.02));
+  border-radius: 16px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  border: 1px solid rgba(90,158,110,0.15);
+  break-inside: avoid;
+}
+.wb-checklist-label {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #3D7A50;
+  margin-bottom: 2.5mm;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+.wb-checklist-label::before {
+  content: "✅";
+  font-size: 10pt;
+}
+.wb-checklist-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.wb-checklist-items li {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5mm;
+  padding: 1.5mm 0;
+  font-size: 8.5pt;
+  color: #3D3D3D;
+  line-height: 1.5;
+}
+.wb-checkbox {
+  width: 4mm;
+  height: 4mm;
+  border: 1.5px solid rgba(90,158,110,0.4);
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 0.5mm;
+}
+
+/* --- Scale (1-10 rating) --- */
+.wb-content-body .wb-scale {
+  background: linear-gradient(135deg, rgba(232,160,176,0.08), rgba(232,184,77,0.06));
+  border-radius: 16px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  border: 1px solid rgba(232,160,176,0.15);
+  break-inside: avoid;
+  text-align: center;
+}
+.wb-scale-label {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #C4707E;
+  margin-bottom: 2mm;
+}
+.wb-scale-question {
+  font-size: 8.5pt;
+  color: #3D3D3D;
+  margin-bottom: 3mm;
+  font-style: italic;
+}
+.wb-scale-row {
+  display: flex;
+  justify-content: center;
+  gap: 2mm;
+  margin-bottom: 1.5mm;
+}
+.wb-scale-circle {
+  width: 7mm;
+  height: 7mm;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232,160,176,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7pt;
+  font-weight: 700;
+  color: #999;
+}
+.wb-scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 6.5pt;
+  color: #999;
+  padding: 0 1mm;
+}
+
+/* --- Draw/Activity area --- */
+.wb-content-body .wb-activity {
+  background: white;
+  border-radius: 16px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  border: 1.5px dashed rgba(232,184,77,0.3);
+  break-inside: avoid;
+}
+.wb-activity-label {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #C49030;
+  margin-bottom: 1.5mm;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+.wb-activity-label::before {
+  content: "🎨";
+  font-size: 11pt;
+}
+.wb-activity-prompt {
+  font-size: 8.5pt;
+  color: #3D3D3D;
+  margin-bottom: 2mm;
+}
+.wb-activity-area {
+  min-height: 30mm;
+  border: 1px solid rgba(232,184,77,0.15);
+  border-radius: 12px;
+  background: rgba(255,253,248,1);
+}
+
+/* --- Reflection fill-in --- */
+.wb-content-body .wb-fillin {
+  background: linear-gradient(135deg, rgba(155,127,191,0.06), rgba(155,127,191,0.02));
+  border-radius: 16px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  border: 1px solid rgba(155,127,191,0.12);
+  break-inside: avoid;
+}
+.wb-fillin-label {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 12pt;
+  font-weight: 700;
+  color: #7B5FA0;
+  margin-bottom: 2.5mm;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+.wb-fillin-label::before {
+  content: "💭";
+  font-size: 10pt;
+}
+.wb-fillin-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5mm;
+  font-size: 8.5pt;
+  color: #3D3D3D;
+  margin-bottom: 1mm;
+  line-height: 2.2;
+}
+.wb-fillin-blank {
+  flex: 1;
+  border-bottom: 1px solid rgba(155,127,191,0.25);
+  min-width: 20mm;
+}
+
+/* ========== ACTIVITY PAGE (full page, no columns) ========== */
+.wb-activity-page {
+  padding: 18mm 22mm 25mm;
+  height: 297mm;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.wb-activity-page .wb-content-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #C49030;
+  background: rgba(232,184,77,0.1);
+  padding: 3px 10px;
+  border-radius: 50px;
+  margin-bottom: 5mm;
+}
+.wb-activity-page h3 {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 26pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin: 0 0 4mm;
+}
+.wb-activity-page p {
+  font-size: 9pt;
+  color: #3D3D3D;
+  line-height: 1.7;
+  margin: 0 0 3mm;
+}
+.wb-activity-page .wb-worksheet,
+.wb-activity-page .wb-checklist,
+.wb-activity-page .wb-scale,
+.wb-activity-page .wb-activity,
+.wb-activity-page .wb-fillin {
+  margin: 5mm 0;
+}
+
+/* ========== AUTHOR PAGE ========== */
+.wb-author-page {
+  background: linear-gradient(135deg, #F3EEF8 0%, #FFF8F0 50%, #FDE8EC 100%);
+  height: 297mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30mm 25mm;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+.wb-author-deco-1,
+.wb-author-deco-2 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+.wb-author-deco-1 { width: 180px; height: 180px; background: #9B7FBF; top: 10%; left: -40px; }
+.wb-author-deco-2 { width: 140px; height: 140px; background: #E8A0B0; bottom: 10%; right: -30px; }
+.wb-author-photo {
+  position: relative;
+  width: 45mm;
+  height: 45mm;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(155,127,191,0.2);
+  margin-bottom: 6mm;
+}
+.wb-author-label {
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #7B5FA0;
+  background: rgba(155,127,191,0.1);
+  padding: 3px 12px;
+  border-radius: 50px;
+  margin-bottom: 5mm;
+}
+.wb-author-name {
+  font-family: var(--font-heading), "Caveat", cursive;
+  font-size: 28pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin: 0;
+}
+.wb-author-role {
+  font-size: 9pt;
+  color: #7B5FA0;
+  font-weight: 600;
+  margin-top: 1mm;
+}
+.wb-author-bio {
+  font-size: 9pt;
+  line-height: 1.8;
+  color: #3D3D3D;
+  max-width: 130mm;
+  margin-top: 6mm;
+}
+.wb-author-links {
+  margin-top: 6mm;
+  display: flex;
+  gap: 5mm;
+}
+.wb-author-link {
+  font-size: 7.5pt;
+  color: #666;
+  background: rgba(155,127,191,0.08);
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+
+/* Footer */
+.wb-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 3mm;
+  padding: 10mm 15mm;
+  font-size: 7pt;
+  letter-spacing: 0.1em;
+  color: #999;
+}
+.wb-footer-dot {
+  color: #C4B3D9;
+}
+
+/* Print bar */
+.wb-print-bar {
+  text-align: center;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 210mm;
+}
+.wb-print-btn {
+  background: #9B7FBF;
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.wb-print-btn:hover { background: #7B5FA0; }
+.wb-print-bar p { font-size: 13px; color: #666; }
+
+/* ========== PRINT ========== */
+@media print {
+  @page { size: A4 portrait; margin: 0; }
+  body { margin: 0 !important; padding: 0 !important; background: white !important; }
+  body > *:not(main), header, footer, nav, .wb-print-bar { display: none !important; }
+  .wb-wrapper { margin: 0; padding: 0; }
+  .wb-page {
+    width: 210mm; height: 297mm; min-height: 297mm; max-height: 297mm;
+    margin: 0; box-shadow: none;
+    page-break-after: always; break-after: page; overflow: hidden;
+  }
+  .wb-page:last-of-type { page-break-after: auto; }
+}
+
+@media screen {
+  .wb-wrapper { background: #E8E2DA; padding: 30px 0; min-height: 100vh; }
+}
