@@ -1,22 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Gift, Check } from "lucide-react";
+import { Mail, Sparkles, Check } from "lucide-react";
 import Link from "next/link";
 import { useNewsletterForm } from "@/lib/useNewsletterForm";
 
 const variants = {
   default: {
     heading: "Erziehungstipps direkt in dein Postfach",
-    body: "Melde dich zum kostenlosen Newsletter an und erhalte regelmäßig praktische Tipps zur Gefühlsförderung — plus 10% Rabatt auf deinen ersten Einkauf.",
+    body: "Melde dich zum kostenlosen Newsletter an und erhalte praktische Tipps zur Gefühlsförderung, neue Blogartikel und exklusive Inhalte — direkt in dein Postfach.",
   },
   shop: {
     heading: "Nicht verpassen!",
-    body: "Abonniere den Newsletter und sichere dir 10% auf deine erste Bestellung. Dazu bekommst du regelmäßig Tipps, wie du die emotionale Entwicklung deines Kindes im Alltag fördern kannst.",
+    body: "Abonniere den Newsletter und erhalte regelmäßig Tipps, wie du die emotionale Entwicklung deines Kindes im Alltag fördern kannst — plus neue Blogartikel und exklusive Inhalte.",
   },
   about: {
     heading: "Bleib mit mir in Kontakt",
-    body: "In meinem Newsletter teile ich regelmäßig mein Wissen aus der Kindheitspädagogik, persönliche Einblicke und exklusive Angebote. Als Dankeschön erhältst du 10% auf deinen ersten Einkauf.",
+    body: "In meinem Newsletter teile ich regelmäßig mein Wissen aus der Kindheitspädagogik, persönliche Einblicke und exklusive Inhalte. Außerdem erfährst du als Erste, wenn neue Blogartikel erscheinen.",
   },
 };
 
@@ -32,6 +32,8 @@ export function NewsletterCompact({
     setEmail,
     success,
     alreadySubscribed,
+    loading,
+    error,
     handleSubmit,
   } = useNewsletterForm();
 
@@ -53,21 +55,21 @@ export function NewsletterCompact({
             </div>
             <h2 className="font-heading text-3xl text-charcoal font-bold">
               {success
-                ? "Wunderbar, du bist dabei!"
+                ? "Fast geschafft!"
                 : "Du bist bereits angemeldet!"}
             </h2>
             <p className="mt-2 text-charcoal-light">
               {success
-                ? "Schau in dein Postfach — dein 10% Rabattcode ist auf dem Weg zu dir."
+                ? "Schau in dein Postfach und bestätige deine E-Mail-Adresse."
                 : "Danke, dass du Teil unserer Gemeinschaft bist."}
             </p>
           </div>
         ) : (
           <>
             <div className="inline-flex items-center gap-2 bg-gold/20 text-gold-dark px-4 py-2 rounded-full border border-gold/20 mb-5">
-              <Gift className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" />
               <span className="text-sm font-semibold">
-                10% Willkommensrabatt
+                Kostenloser Newsletter
               </span>
             </div>
 
@@ -101,15 +103,22 @@ export function NewsletterCompact({
               </div>
               <button
                 type="submit"
-                className="mt-3 w-full inline-flex items-center justify-center gap-2 bg-lavender hover:bg-lavender-dark text-white font-semibold px-6 py-3.5 rounded-2xl transition-colors shadow-sm hover:shadow-md"
+                disabled={loading}
+                className="mt-3 w-full inline-flex items-center justify-center gap-2 bg-lavender hover:bg-lavender-dark text-white font-semibold px-6 py-3.5 rounded-2xl transition-colors shadow-sm hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <Mail className="h-4 w-4" />
-                Anmelden
+                {loading ? "Wird gesendet…" : "Anmelden"}
               </button>
+              {error && (
+                <p className="mt-3 text-sm text-rose-dark" role="alert">
+                  {error}
+                </p>
+              )}
             </form>
 
             <p className="mt-4 text-xs text-charcoal-lighter">
-              Du kannst den Newsletter jederzeit abbestellen.{" "}
+              Versand über unseren Dienstleister DigiLetter — du kannst den
+              Newsletter jederzeit abbestellen.{" "}
               <Link
                 href="/datenschutz"
                 className="underline hover:text-lavender-dark"

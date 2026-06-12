@@ -170,6 +170,14 @@ export default function DatenschutzPage() {
                 Abmeldelink am Ende jedes Newsletters.
               </li>
             </ul>
+            <p className="mt-3">
+              Für den Versand von Newslettern, Bestätigungs- und
+              Bestell-E-Mails nutzen wir DigiLetter, einen E-Mail-Dienst der
+              DigiRift GmbH (Auftragsverarbeitung gem. Art. 28 DSGVO).
+              Verarbeitet werden E-Mail-Adresse, Vorname und ggf.
+              Quiz-Ergebnis bzw. Bestelldaten. Jede Newsletter-E-Mail enthält
+              einen Abmeldelink.
+            </p>
           </div>
 
           {/* 7. Shop / E-Commerce */}
@@ -195,10 +203,55 @@ export default function DatenschutzPage() {
             </ul>
           </div>
 
-          {/* 8. Cookies */}
+          {/* 8. Zahlungsdienstleister */}
           <div>
             <h2 className="text-xl font-semibold text-charcoal">
-              8. Einsatz von Cookies
+              8. Zahlungsdienstleister
+            </h2>
+            <p className="mt-2">
+              Für die Abwicklung von Zahlungen in unserem Shop setzen wir
+              externe Zahlungsdienstleister ein: Klarna Bank AB (publ),
+              Sveavägen 46, 111 34 Stockholm, Schweden (Rechnungskauf,
+              Sofortüberweisung, Ratenkauf) sowie PayPal (Europe) S.à r.l. et
+              Cie, S.C.A., 22–24 Boulevard Royal, L-2449 Luxemburg. Wenn Sie
+              eine Zahlung vornehmen, werden die dafür erforderlichen Daten
+              (Name, Adresse, E-Mail-Adresse, Warenkorbdaten) an den jeweils
+              gewählten Anbieter übermittelt.
+            </p>
+            <ul className="mt-3 list-disc pl-6 space-y-1">
+              <li>
+                <strong>Rechtsgrundlage:</strong> Vertragserfüllung (Art. 6
+                Abs. 1 lit. b DSGVO).
+              </li>
+              <li>
+                <strong>Weitere Informationen:</strong> Datenschutzerklärung
+                von Klarna unter{" "}
+                <a
+                  href="https://www.klarna.com/de/datenschutz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lavender-dark hover:underline"
+                >
+                  klarna.com/de/datenschutz
+                </a>{" "}
+                und von PayPal unter{" "}
+                <a
+                  href="https://www.paypal.com/de/webapps/mpp/ua/privacy-full"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lavender-dark hover:underline"
+                >
+                  paypal.com/de/webapps/mpp/ua/privacy-full
+                </a>
+                .
+              </li>
+            </ul>
+          </div>
+
+          {/* 9. Cookies */}
+          <div>
+            <h2 className="text-xl font-semibold text-charcoal">
+              9. Einsatz von Cookies
             </h2>
             <p className="mt-2">
               Cookies sind kleine Textdateien bzw. sonstige Speichervermerke,
@@ -216,10 +269,10 @@ export default function DatenschutzPage() {
             </ul>
           </div>
 
-          {/* 9. Betroffenenrechte */}
+          {/* 10. Betroffenenrechte */}
           <div>
             <h2 className="text-xl font-semibold text-charcoal">
-              9. Rechte der betroffenen Personen
+              10. Rechte der betroffenen Personen
             </h2>
             <p className="mt-2">
               Ihnen stehen als Betroffene nach der DSGVO verschiedene Rechte zu,
@@ -269,10 +322,10 @@ export default function DatenschutzPage() {
             </ul>
           </div>
 
-          {/* 10. Änderungen */}
+          {/* 11. Änderungen */}
           <div>
             <h2 className="text-xl font-semibold text-charcoal">
-              10. Änderung und Aktualisierung der Datenschutzerklärung
+              11. Änderung und Aktualisierung der Datenschutzerklärung
             </h2>
             <p className="mt-2">
               Wir bitten Sie, sich regelmäßig über den Inhalt unserer
@@ -280,7 +333,7 @@ export default function DatenschutzPage() {
               Datenschutzerklärung an, sobald die Änderungen der von uns
               durchgeführten Datenverarbeitungen dies erforderlich machen.
             </p>
-            <p className="mt-2">Stand: März 2025</p>
+            <p className="mt-2">Stand: Juni 2026</p>
           </div>
 
           <p className="text-sm text-charcoal-lighter">

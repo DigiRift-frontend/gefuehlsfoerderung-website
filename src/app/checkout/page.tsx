@@ -2,6 +2,8 @@
 
 import { useCart } from "@/context/CartContext";
 import { getProduct } from "@/lib/cart";
+import { products } from "@/lib/products";
+import { SHIPPING_AMOUNT_CENTS } from "@/lib/order-lines";
 import { formatPrice } from "@/lib/utils";
 import { useEffect, useState, useCallback } from "react";
 import { ShoppingBag, ArrowLeft, Loader2 } from "lucide-react";
@@ -46,7 +48,19 @@ export default function CheckoutPage() {
     orderLines: unknown[];
   } | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
+  const [digitalConsent, setDigitalConsent] = useState(false);
   const router = useRouter();
+
+  // Warenkorb-Zusammensetzung (physisch / digital) für Versand & §356 Abs. 5 BGB
+  const hasPhysical = items.some((i) => {
+    const type = products.find((p) => p.id === i.productId)?.type;
+    return type === "physical" || type === "mixed";
+  });
+  const hasDigital = items.some((i) => {
+    const type = products.find((p) => p.id === i.productId)?.type;
+    return type === "digital" || type === "mixed";
+  });
+  const payBlocked = hasDigital && !digitalConsent;
 
   // 1. Create Klarna session once cart is available
   useEffect(() => {
@@ -294,8 +308,8 @@ export default function CheckoutPage() {
                     ))}
                     <button
                       onClick={handlePayPal}
-                      disabled={phase === "paying"}
-                      className="px-4 py-2 rounded-xl text-sm font-semibold bg-[#0070ba]/10 text-[#003087] hover:bg-[#0070ba]/20 transition-colors"
+                      disabled={phase === "paying" || payBlocked}
+                      className="px-4 py-2 rounded-xl text-sm font-semibold bg-[#0070ba]/10 text-[#003087] hover:bg-[#0070ba]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       PayPal
                     </button>
@@ -318,12 +332,30 @@ export default function CheckoutPage() {
                   className={phase === "loading" ? "hidden" : "min-h-[200px]"}
                 />
 
+                {/* Digital-Consent (§356 Abs. 5 BGB) */}
+                {hasDigital && (
+                  <label className="mt-6 flex items-start gap-3 bg-lavender/5 border border-lavender/15 rounded-2xl p-4 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={digitalConsent}
+                      onChange={(e) => setDigitalConsent(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 accent-lavender flex-shrink-0"
+                    />
+                    <span className="text-xs text-charcoal-light leading-relaxed">
+                      Ich verlange, dass mit der Bereitstellung der digitalen
+                      Inhalte sofort begonnen wird, und bestätige meine
+                      Kenntnis, dass ich dadurch mein Widerrufsrecht für diese
+                      Inhalte verliere.
+                    </span>
+                  </label>
+                )}
+
                 {/* Pay button */}
                 {(phase === "ready" || phase === "paying") && (
                   <button
                     onClick={handlePay}
-                    disabled={phase === "paying"}
-                    className="mt-6 w-full flex items-center justify-center gap-2 bg-sage text-white font-semibold py-4 rounded-2xl hover:bg-sage-dark transition-colors text-lg disabled:opacity-50"
+                    disabled={phase === "paying" || payBlocked}
+                    className="mt-6 w-full flex items-center justify-center gap-2 bg-sage text-white font-semibold py-4 rounded-2xl hover:bg-sage-dark transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {phase === "paying" ? (
                       <>
@@ -336,8 +368,29 @@ export default function CheckoutPage() {
                   </button>
                 )}
 
+                {payBlocked && (
+                  <p className="mt-2 text-xs text-rose-dark text-center">
+                    Bitte bestätige zuerst den Hinweis zu den digitalen
+                    Inhalten, um die Zahlung zu starten.
+                  </p>
+                )}
+
                 <p className="mt-4 text-xs text-charcoal-lighter text-center">
                   Kein MwSt-Ausweis, Kleinunternehmer gem. §19 UStG.
+                </p>
+                <p className="mt-2 text-xs text-charcoal-lighter text-center">
+                  Mit deiner Bestellung akzeptierst du unsere{" "}
+                  <Link href="/agb" className="text-lavender-dark underline">
+                    AGB
+                  </Link>{" "}
+                  und hast die{" "}
+                  <Link
+                    href="/agb#widerruf"
+                    className="text-lavender-dark underline"
+                  >
+                    Widerrufsbelehrung
+                  </Link>{" "}
+                  zur Kenntnis genommen.
                 </p>
               </div>
             </div>
@@ -389,6 +442,14 @@ export default function CheckoutPage() {
                       {formatPrice(cartTotal)}
                     </span>
                   </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-charcoal-light">Versand</span>
+                    <span className="font-semibold">
+                      {hasPhysical
+                        ? formatPrice(SHIPPING_AMOUNT_CENTS / 100)
+                        : "kostenlos (digital)"}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="border-t border-lavender/10 mt-4 pt-4 flex justify-between">
@@ -397,7 +458,8 @@ export default function CheckoutPage() {
                     {formatPrice(
                       sessionData?.orderAmount
                         ? sessionData.orderAmount / 100
-                        : cartTotal
+                        : cartTotal +
+                            (hasPhysical ? SHIPPING_AMOUNT_CENTS / 100 : 0)
                     )}
                   </span>
                 </div>

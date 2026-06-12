@@ -1,39 +1,41 @@
-import { klarnaFetch } from "@/lib/klarna";
+import { processKlarnaOrder } from "@/lib/klarna-order";
 
+// Klarna-Notification-Webhook — Backup für den Fall, dass die synchrone
+// Verarbeitung in /api/checkout/authorize fehlgeschlagen ist.
+// Idempotent: bereits eingezogene Bestellungen werden übersprungen.
 export async function POST(request: Request) {
   try {
     const url = new URL(request.url);
-    const orderId = url.searchParams.get("klarna_order_id");
+
+    // Klarna signiert Push-Notifications nicht — wir authentifizieren
+    // über ein Secret, das wir selbst beim Anlegen der Bestellung in
+    // die notification-URL geschrieben haben.
+    const expectedKey = process.env.KLARNA_WEBHOOK_SECRET;
+    if (expectedKey && url.searchParams.get("key") !== expectedKey) {
+      console.warn("Klarna-Webhook mit ungültigem Key abgewiesen");
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    let orderId = url.searchParams.get("klarna_order_id");
+
+    // Klarna kann die Order-ID auch im Body senden ({"order_id": "..."})
+    if (!orderId) {
+      try {
+        const body = await request.json();
+        orderId = body?.order_id ?? body?.orderId ?? null;
+      } catch {
+        // kein JSON-Body — ok
+      }
+    }
 
     if (!orderId) {
       return Response.json({ error: "Missing order ID" }, { status: 400 });
     }
 
-    // Fetch order details from Klarna
-    const order = await klarnaFetch(
-      `/ordermanagement/v1/orders/${orderId}`
+    const result = await processKlarnaOrder(orderId);
+    console.log(
+      `Klarna-Webhook ${orderId}: processed=${result.processed} alreadyCaptured=${result.alreadyCaptured} status=${result.status}`
     );
-
-    console.log("=== KLARNA ORDER PUSH ===");
-    console.log("Order ID:", order.order_id);
-    console.log("Status:", order.status);
-    console.log("Email:", order.billing_address?.email);
-    console.log("Amount:", order.order_amount);
-    console.log("Items:", order.order_lines?.map((l: { name: string }) => l.name));
-    console.log("==========================");
-
-    // Acknowledge the order
-    if (order.status === "AUTHORIZED") {
-      await klarnaFetch(
-        `/ordermanagement/v1/orders/${orderId}/acknowledge`,
-        { method: "POST" }
-      );
-      console.log("Order acknowledged:", orderId);
-    }
-
-    // TODO: Send order confirmation email via DigiLetter
-    // TODO: For digital products, send download links
-    // TODO: For physical products, trigger shipping + capture payment
 
     return Response.json({ received: true });
   } catch (err) {

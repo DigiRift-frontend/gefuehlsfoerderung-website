@@ -128,13 +128,22 @@ export default function AGBPage() {
               diese folglich auch nicht aus (Kleinunternehmerstatus).
             </p>
             <p className="mt-2">
-              (2) Der Verbraucher hat die Möglichkeit der Zahlung per Vorkasse,
-              PayPal, Kreditkarte (Visa, Mastercard).
+              (2) Der Verbraucher hat die Möglichkeit der Zahlung per Klarna
+              (Rechnungskauf, Sofortüberweisung, Ratenkauf) und PayPal. Details
+              unter{" "}
+              <a
+                href="/zahlungsarten"
+                className="text-lavender-dark hover:underline"
+              >
+                /zahlungsarten
+              </a>
+              .
             </p>
             <p className="mt-2">
-              (3) Hat der Verbraucher die Zahlung per Vorkasse gewählt, so
-              verpflichtet er sich, den Kaufpreis unverzüglich nach
-              Vertragsschluss zu zahlen.
+              (3) Der Kaufpreis ist mit Vertragsschluss fällig. Die Abwicklung
+              der Zahlung erfolgt über den jeweils gewählten
+              Zahlungsdienstleister; beim Klarna-Rechnungskauf bzw. Ratenkauf
+              gelten die von Klarna mitgeteilten Zahlungsfristen.
             </p>
           </div>
 
@@ -148,9 +157,7 @@ export default function AGBPage() {
               anders angegeben haben, sind alle von uns angebotenen Artikel
               sofort versandfertig. Die Lieferung erfolgt hier spätestens
               innerhalb von 5 Werktagen. Dabei beginnt die Frist für die
-              Lieferung im Falle der Zahlung per Vorkasse am Tag nach
-              Zahlungsauftrag an die mit der Überweisung beauftragte Bank und
-              bei allen anderen Zahlungsarten am Tag nach Vertragsschluss zu
+              Lieferung am Tag nach Vertragsschluss zu
               laufen. Fällt das Fristende auf einen Samstag, Sonntag oder
               gesetzlichen Feiertag am Lieferort, so endet die Frist am
               nächsten Werktag.
@@ -175,7 +182,7 @@ export default function AGBPage() {
           </div>
 
           {/* §6 */}
-          <div>
+          <div id="widerruf" className="scroll-mt-28">
             <h2 className="text-lg font-semibold text-charcoal">
               &sect;6 Widerrufsrecht des Kunden als Verbraucher
             </h2>
@@ -262,6 +269,21 @@ export default function AGBPage() {
             </p>
             <p className="mt-2 text-sm text-charcoal-lighter italic">
               Ende der Widerrufsbelehrung
+            </p>
+            <p className="mt-4 font-semibold text-charcoal">
+              Besonderheit bei digitalen Inhalten
+            </p>
+            <p className="mt-2">
+              Das Widerrufsrecht erlischt bei Verträgen über die Lieferung von
+              nicht auf einem körperlichen Datenträger befindlichen digitalen
+              Inhalten (z.&nbsp;B. PDF-Downloads), wenn die Käuferin bzw. der
+              Käufer ausdrücklich zugestimmt hat, dass wir mit der Ausführung
+              des Vertrages vor Ablauf der Widerrufsfrist beginnen, und ihre
+              bzw. seine Kenntnis davon bestätigt hat, dass sie bzw. er durch
+              diese Zustimmung mit Beginn der Ausführung des Vertrages das
+              Widerrufsrecht verliert (&sect;&nbsp;356 Abs. 5 BGB). Diese
+              Zustimmung wird im Checkout über eine entsprechende Checkbox
+              eingeholt.
             </p>
           </div>
 
@@ -354,7 +376,7 @@ export default function AGBPage() {
           </div>
 
           <p className="text-sm text-charcoal-lighter">
-            Stand der AGB: Jun. 2022
+            Stand der AGB: Juni 2026
           </p>
         </div>
       </div>

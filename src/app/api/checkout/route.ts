@@ -1,62 +1,24 @@
 import { klarnaFetch } from "@/lib/klarna";
-import { products } from "@/lib/products";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
+import {
+  calculateOrder,
+  toKlarnaOrderLines,
+  InvalidCartError,
+  type CartItemInput,
+} from "@/lib/order-lines";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const items: { productId: string; quantity: number }[] = body.items;
+    const items: CartItemInput[] = body.items;
 
-    if (!items?.length) {
-      return Response.json({ error: "Warenkorb ist leer" }, { status: 400 });
-    }
-
-    const orderLines = [];
-    let totalAmount = 0;
-    let hasPhysical = false;
-
-    for (const item of items) {
-      const product = products.find((p) => p.id === item.productId);
-      if (!product || !product.inStock) {
-        return Response.json(
-          { error: `Produkt nicht verfügbar: ${item.productId}` },
-          { status: 400 }
-        );
+    let calculation;
+    try {
+      calculation = calculateOrder(items);
+    } catch (err) {
+      if (err instanceof InvalidCartError) {
+        return Response.json({ error: err.message }, { status: 400 });
       }
-
-      const qty = Math.min(Math.max(item.quantity, 1), 10);
-      const unitPrice = Math.round(product.price * 100);
-      const lineTotal = unitPrice * qty;
-      totalAmount += lineTotal;
-
-      if (product.type === "physical" || product.type === "mixed") {
-        hasPhysical = true;
-      }
-
-      orderLines.push({
-        type: product.type === "digital" ? "digital" : "physical",
-        name: product.title,
-        quantity: qty,
-        unit_price: unitPrice,
-        total_amount: lineTotal,
-        tax_rate: 0,
-        total_tax_amount: 0,
-      });
-    }
-
-    if (hasPhysical) {
-      const shippingAmount = 499;
-      totalAmount += shippingAmount;
-      orderLines.push({
-        type: "shipping_fee" as const,
-        name: "Standardversand (2–5 Werktage)",
-        quantity: 1,
-        unit_price: shippingAmount,
-        total_amount: shippingAmount,
-        tax_rate: 0,
-        total_tax_amount: 0,
-      });
+      throw err;
     }
 
     // Create Klarna Payments session
@@ -66,10 +28,9 @@ export async function POST(request: Request) {
         purchase_country: "DE",
         purchase_currency: "EUR",
         locale: "de-DE",
-        order_amount: totalAmount,
+        order_amount: calculation.totalAmount,
         order_tax_amount: 0,
-        order_lines: orderLines,
-        // merchant_urls require HTTPS, added when deployed to production
+        order_lines: toKlarnaOrderLines(calculation.orderLines),
       }),
     });
 
@@ -77,8 +38,7 @@ export async function POST(request: Request) {
       clientToken: session.client_token,
       sessionId: session.session_id,
       paymentMethods: session.payment_method_categories,
-      orderAmount: totalAmount,
-      orderLines,
+      orderAmount: calculation.totalAmount,
     });
   } catch (err) {
     console.error("Klarna session error:", err);

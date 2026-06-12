@@ -1,82 +1,68 @@
+import { paypalFetch } from "@/lib/paypal";
+import {
+  calculateOrder,
+  InvalidCartError,
+  type CartItemInput,
+} from "@/lib/order-lines";
 import { products } from "@/lib/products";
-
-const PAYPAL_API =
-  process.env.PAYPAL_MODE === "live"
-    ? "https://api-m.paypal.com"
-    : "https://api-m.sandbox.paypal.com";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
 
-async function getAccessToken() {
-  const clientId = process.env.PAYPAL_CLIENT_ID ?? "";
-  const clientSecret = process.env.PAYPAL_CLIENT_SECRET ?? "";
-  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
-
-  const res = await fetch(`${PAYPAL_API}/v1/oauth2/token`, {
-    method: "POST",
-    headers: {
-      Authorization: `Basic ${auth}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: "grant_type=client_credentials",
-  });
-
-  const data = await res.json();
-  return data.access_token;
+function euro(cents: number): string {
+  return (cents / 100).toFixed(2);
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const items: { productId: string; quantity: number }[] = body.items;
+    const items: CartItemInput[] = body.items;
 
-    if (!items?.length) {
-      return Response.json({ error: "Warenkorb ist leer" }, { status: 400 });
-    }
-
-    // Calculate total server-side
-    let total = 0;
-    const paypalItems = [];
-
-    for (const item of items) {
-      const product = products.find((p) => p.id === item.productId);
-      if (!product || !product.inStock) {
-        return Response.json(
-          { error: `Produkt nicht verfügbar: ${item.productId}` },
-          { status: 400 }
-        );
+    // Beträge serverseitig berechnen (inkl. Versand für physische Artikel —
+    // identisch zur Klarna-Kasse).
+    let calculation;
+    try {
+      calculation = calculateOrder(items);
+    } catch (err) {
+      if (err instanceof InvalidCartError) {
+        return Response.json({ error: err.message }, { status: 400 });
       }
-      const qty = Math.min(Math.max(item.quantity, 1), 10);
-      total += product.price * qty;
-      paypalItems.push({
-        name: product.title,
-        quantity: String(qty),
-        unit_amount: {
-          currency_code: "EUR",
-          value: product.price.toFixed(2),
-        },
-      });
+      throw err;
     }
 
-    const accessToken = await getAccessToken();
+    const paypalItems = calculation.orderLines
+      .filter((line) => line.type !== "shipping_fee")
+      .map((line) => {
+        const product = products.find((p) => p.id === line.productId);
+        return {
+          name: line.name.slice(0, 127),
+          sku: line.productId, // Produkt-ID für das Fulfillment
+          quantity: String(line.quantity),
+          category:
+            product?.type === "digital" ? "DIGITAL_GOODS" : "PHYSICAL_GOODS",
+          unit_amount: {
+            currency_code: "EUR",
+            value: euro(line.unit_price),
+          },
+        };
+      });
 
-    const res = await fetch(`${PAYPAL_API}/v2/checkout/orders`, {
+    const { status, data } = await paypalFetch("/v2/checkout/orders", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         intent: "CAPTURE",
         purchase_units: [
           {
             amount: {
               currency_code: "EUR",
-              value: total.toFixed(2),
+              value: euro(calculation.totalAmount),
               breakdown: {
                 item_total: {
                   currency_code: "EUR",
-                  value: total.toFixed(2),
+                  value: euro(calculation.itemAmount),
+                },
+                shipping: {
+                  currency_code: "EUR",
+                  value: euro(calculation.shippingAmount),
                 },
               },
             },
@@ -89,15 +75,27 @@ export async function POST(request: Request) {
           brand_name: "Gefühlsförderung",
           locale: "de-DE",
           user_action: "PAY_NOW",
+          shipping_preference: calculation.hasPhysical
+            ? "GET_FROM_FILE"
+            : "NO_SHIPPING",
         },
       }),
     });
 
-    const order = await res.json();
+    const order = data as {
+      id?: string;
+      links?: { rel: string; href: string }[];
+    };
 
-    const approveUrl = order.links?.find(
-      (l: { rel: string }) => l.rel === "approve"
-    )?.href;
+    if (status >= 400 || !order?.id) {
+      console.error("PayPal create order failed:", status, JSON.stringify(data).slice(0, 500));
+      return Response.json(
+        { error: "PayPal-Bestellung konnte nicht erstellt werden" },
+        { status: 502 }
+      );
+    }
+
+    const approveUrl = order.links?.find((l) => l.rel === "approve")?.href;
 
     return Response.json({ orderID: order.id, approveUrl });
   } catch (err) {

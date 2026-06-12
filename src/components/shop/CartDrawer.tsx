@@ -6,7 +6,9 @@ import { formatPrice } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Minus, Plus, Trash2, ShoppingBag, CreditCard } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function CartDrawer() {
   const {
@@ -20,6 +22,13 @@ export function CartDrawer() {
     mounted,
   } = useCart();
   const router = useRouter();
+  const [digitalConsent, setDigitalConsent] = useState(false);
+
+  // §356 Abs. 5 BGB: digitale Inhalte im Warenkorb?
+  const hasDigital = items.some((i) => {
+    const type = getProduct(i.productId)?.type;
+    return type === "digital" || type === "mixed";
+  });
 
   if (!mounted) return null;
 
@@ -197,6 +206,24 @@ export function CartDrawer() {
                   Versandkosten werden an der Kasse berechnet.
                 </p>
 
+                {/* Digital-Consent (§356 Abs. 5 BGB) */}
+                {hasDigital && (
+                  <label className="flex items-start gap-2.5 bg-lavender/5 border border-lavender/15 rounded-xl p-3 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={digitalConsent}
+                      onChange={(e) => setDigitalConsent(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 accent-lavender flex-shrink-0"
+                    />
+                    <span className="text-[11px] text-charcoal-light leading-relaxed">
+                      Ich verlange, dass mit der Bereitstellung der digitalen
+                      Inhalte sofort begonnen wird, und bestätige meine
+                      Kenntnis, dass ich dadurch mein Widerrufsrecht für diese
+                      Inhalte verliere.
+                    </span>
+                  </label>
+                )}
+
                 <button
                   onClick={handleCheckout}
                   className="w-full flex items-center justify-center gap-2 bg-sage text-white font-semibold py-3.5 rounded-2xl hover:bg-sage-dark transition-colors shadow-sm hover:shadow-md"
@@ -207,10 +234,23 @@ export function CartDrawer() {
 
                 <button
                   onClick={handlePayPal}
-                  className="w-full flex items-center justify-center gap-2 bg-[#0070ba] text-white font-semibold py-3.5 rounded-2xl hover:bg-[#005ea6] transition-colors shadow-sm hover:shadow-md"
+                  disabled={hasDigital && !digitalConsent}
+                  className="w-full flex items-center justify-center gap-2 bg-[#0070ba] text-white font-semibold py-3.5 rounded-2xl hover:bg-[#005ea6] transition-colors shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                 >
                   Mit PayPal bezahlen
                 </button>
+
+                <p className="text-[11px] text-charcoal-lighter text-center">
+                  Es gelten unsere{" "}
+                  <Link
+                    href="/agb"
+                    className="text-lavender-dark underline"
+                    onClick={() => setCartOpen(false)}
+                  >
+                    AGB (inkl. Widerrufsbelehrung)
+                  </Link>
+                  .
+                </p>
               </div>
             )}
           </motion.div>

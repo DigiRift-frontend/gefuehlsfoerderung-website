@@ -11,6 +11,8 @@ export function NewsletterSignup() {
     setEmail,
     success,
     alreadySubscribed,
+    loading,
+    error,
     handleSubmit,
   } = useNewsletterForm();
 
@@ -35,10 +37,10 @@ export function NewsletterSignup() {
             <Check className="h-6 w-6 text-sage" />
           </div>
           <h3 className="text-lg font-bold text-charcoal">
-            Wunderbar, du bist dabei!
+            Fast geschafft!
           </h3>
           <p className="mt-2 text-sm text-charcoal-light">
-            Schau in dein Postfach — dein 10% Rabattcode ist auf dem Weg zu dir.
+            Schau in dein Postfach und bestätige deine E-Mail-Adresse.
           </p>
         </>
       ) : (
@@ -50,10 +52,9 @@ export function NewsletterSignup() {
             Mehr Tipps für den Familienalltag
           </h3>
           <p className="mt-2 text-sm text-charcoal-light max-w-md mx-auto">
-            Melde dich zum kostenlosen Newsletter an und erhalte regelmäßig
-            praktische Tipps zur Gefühlsförderung — plus{" "}
-            <strong className="text-lavender-dark">10% Rabatt</strong> auf
-            deinen ersten Einkauf.
+            Melde dich zum kostenlosen Newsletter an und erhalte praktische
+            Tipps zur Gefühlsförderung, neue Blogartikel und exklusive
+            Inhalte.
           </p>
           <form
             onSubmit={handleSubmit}
@@ -76,14 +77,21 @@ export function NewsletterSignup() {
             />
             <button
               type="submit"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-lavender px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-lavender-dark transition-colors"
+              disabled={loading}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-lavender px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-lavender-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Mail className="h-4 w-4" />
-              Anmelden
+              {loading ? "Wird gesendet…" : "Anmelden"}
             </button>
           </form>
+          {error && (
+            <p className="mt-3 text-xs text-rose-dark" role="alert">
+              {error}
+            </p>
+          )}
           <p className="mt-3 text-xs text-charcoal-lighter">
-            Jederzeit abbestellbar.{" "}
+            Versand über unseren Dienstleister DigiLetter, jederzeit
+            abbestellbar.{" "}
             <a
               href="/datenschutz"
               className="underline hover:text-lavender-dark"

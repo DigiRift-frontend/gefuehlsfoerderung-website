@@ -53,6 +53,9 @@ const footerNav = {
     { name: "Impressum", href: "/impressum" },
     { name: "Datenschutz", href: "/datenschutz" },
     { name: "AGB", href: "/agb" },
+    { name: "Versand", href: "/versand" },
+    { name: "Zahlungsarten", href: "/zahlungsarten" },
+    { name: "Widerruf", href: "/agb#widerruf" },
   ],
   social: [
     {

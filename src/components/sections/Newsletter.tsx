@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Mail, Gift, Check } from "lucide-react";
+import { Mail, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useNewsletterForm } from "@/lib/useNewsletterForm";
 
@@ -13,6 +13,8 @@ export function Newsletter() {
     setEmail,
     success,
     alreadySubscribed,
+    loading,
+    error,
     handleSubmit,
   } = useNewsletterForm();
 
@@ -37,21 +39,21 @@ export function Newsletter() {
                 </div>
                 <h2 className="font-heading text-4xl sm:text-5xl text-charcoal font-bold">
                   {success
-                    ? "Wunderbar, du bist dabei!"
+                    ? "Fast geschafft!"
                     : "Du bist bereits angemeldet!"}
                 </h2>
                 <p className="mt-4 text-charcoal-light text-lg">
                   {success
-                    ? "Schau in dein Postfach — dein 10% Rabattcode ist auf dem Weg zu dir."
+                    ? "Schau in dein Postfach und bestätige deine E-Mail-Adresse — erst dann ist deine Anmeldung abgeschlossen."
                     : "Danke, dass du Teil unserer Gemeinschaft bist. Wir freuen uns, dich auf dem Weg der Gefühlsförderung zu begleiten."}
                 </p>
               </div>
             ) : (
               <>
                 <div className="inline-flex items-center gap-2 bg-gold/20 text-gold-dark px-4 py-2 rounded-full border border-gold/20 mb-6">
-                  <Gift className="h-4 w-4" />
+                  <Sparkles className="h-4 w-4" />
                   <span className="text-sm font-semibold">
-                    10% Willkommensrabatt
+                    Kostenloser Newsletter
                   </span>
                 </div>
 
@@ -59,12 +61,12 @@ export function Newsletter() {
                   Erziehungstipps direkt in dein Postfach
                 </h2>
                 <p className="mt-4 text-charcoal-light text-lg">
-                  Melde dich zum Newsletter an und erhalte Tipps zur
-                  Gefühlsförderung, exklusive Angebote und einen{" "}
+                  Melde dich zum Newsletter an und erhalte{" "}
                   <strong className="text-lavender-dark">
-                    10% Rabattcode
-                  </strong>{" "}
-                  für deinen ersten Einkauf.
+                    Tipps zur Gefühlsförderung
+                  </strong>
+                  , neue Blogartikel und exklusive Inhalte — direkt in dein
+                  Postfach.
                 </p>
 
                 <form
@@ -88,14 +90,24 @@ export function Newsletter() {
                       className="flex-1 px-5 py-3.5 rounded-2xl border border-lavender/20 bg-white focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal placeholder:text-charcoal-lighter"
                     />
                   </div>
-                  <Button type="submit" className="mt-3 w-full">
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="mt-3 w-full disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
                     <Mail className="h-4 w-4 mr-2" />
-                    Anmelden
+                    {loading ? "Wird gesendet…" : "Anmelden"}
                   </Button>
+                  {error && (
+                    <p className="mt-3 text-sm text-rose-dark" role="alert">
+                      {error}
+                    </p>
+                  )}
                 </form>
 
                 <p className="mt-4 text-xs text-charcoal-lighter">
-                  Du kannst den Newsletter jederzeit abbestellen.{" "}
+                  Versand über unseren Dienstleister DigiLetter — du kannst
+                  den Newsletter jederzeit abbestellen.{" "}
                   <a
                     href="/datenschutz"
                     className="underline hover:text-lavender-dark"

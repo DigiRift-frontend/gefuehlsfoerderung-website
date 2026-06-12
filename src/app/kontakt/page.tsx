@@ -1,9 +1,58 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { Mail, Check } from "lucide-react";
+
+const TOPICS = [
+  "Allgemeine Frage",
+  "Zahlungsprobleme",
+  "Lieferschwierigkeiten",
+  "Beschädigte Bestellung",
+  "Kooperation",
+  "Kritik und Anregung",
+];
 
 export default function KontaktPage() {
+  const [topic, setTopic] = useState(TOPICS[0]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [website, setWebsite] = useState(""); // Honeypot
+  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (status === "loading") return;
+    setStatus("loading");
+    setError("");
+
+    try {
+      const res = await fetch("/api/kontakt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic, name, email, message, website }),
+      });
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data?.success) {
+        setStatus("success");
+      } else {
+        setStatus("idle");
+        setError(
+          data?.error ||
+            "Deine Nachricht konnte nicht gesendet werden. Bitte versuche es erneut."
+        );
+      }
+    } catch {
+      setStatus("idle");
+      setError(
+        "Deine Nachricht konnte nicht gesendet werden. Bitte versuche es erneut."
+      );
+    }
+  }
+
   return (
     <>
       <section className="bg-gradient-to-b from-sage/10 to-cream py-16 md:py-24">
@@ -80,60 +129,121 @@ export default function KontaktPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="bg-white rounded-3xl p-8 border border-lavender/10"
             >
-              <h3 className="text-lg font-semibold text-charcoal mb-6">
-                Schreib mir eine Nachricht
-              </h3>
-              <form className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-charcoal mb-1.5">
-                    Anliegen
-                  </label>
-                  <select className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal">
-                    <option>Allgemeine Frage</option>
-                    <option>Zahlungsprobleme</option>
-                    <option>Lieferschwierigkeiten</option>
-                    <option>Beschädigte Bestellung</option>
-                    <option>Kooperation</option>
-                    <option>Kritik und Anregung</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-charcoal mb-1.5">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Dein Name"
-                    className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal placeholder:text-charcoal-lighter"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-charcoal mb-1.5">
-                    E-Mail
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="deine@email.de"
-                    className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal placeholder:text-charcoal-lighter"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-charcoal mb-1.5">
-                    Nachricht
-                  </label>
-                  <textarea
-                    rows={5}
-                    placeholder="Beschreibe dein Anliegen..."
-                    className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal placeholder:text-charcoal-lighter resize-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-lavender hover:bg-lavender-dark text-white font-semibold py-3.5 rounded-2xl transition-colors"
+              {status === "success" ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="bg-sage/10 border border-sage/30 rounded-2xl p-8 text-center"
                 >
-                  Nachricht senden
-                </button>
-              </form>
+                  <div className="w-14 h-14 rounded-full bg-sage/20 flex items-center justify-center mx-auto mb-4">
+                    <Check className="h-7 w-7 text-sage-dark" strokeWidth={3} />
+                  </div>
+                  <p className="font-semibold text-sage-dark text-lg">
+                    Deine Nachricht ist unterwegs!
+                  </p>
+                  <p className="mt-2 text-charcoal-light">
+                    Ich melde mich so schnell wie möglich.
+                  </p>
+                </motion.div>
+              ) : (
+                <>
+                  <h3 className="text-lg font-semibold text-charcoal mb-6">
+                    Schreib mir eine Nachricht
+                  </h3>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-charcoal mb-1.5">
+                        Anliegen
+                      </label>
+                      <select
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                        className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal"
+                      >
+                        {TOPICS.map((t) => (
+                          <option key={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-charcoal mb-1.5">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Dein Name"
+                        className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal placeholder:text-charcoal-lighter"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-charcoal mb-1.5">
+                        E-Mail
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="deine@email.de"
+                        className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal placeholder:text-charcoal-lighter"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-charcoal mb-1.5">
+                        Nachricht
+                      </label>
+                      <textarea
+                        rows={5}
+                        required
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Beschreibe dein Anliegen..."
+                        className="w-full px-4 py-3 rounded-2xl border border-lavender/20 bg-cream focus:outline-none focus:ring-2 focus:ring-lavender/50 text-charcoal placeholder:text-charcoal-lighter resize-none"
+                      />
+                    </div>
+                    {/* Honeypot — bleibt für Menschen unsichtbar */}
+                    <input
+                      type="text"
+                      name="website"
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      className="hidden"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                    />
+                    <button
+                      type="submit"
+                      disabled={status === "loading"}
+                      className="w-full bg-lavender hover:bg-lavender-dark text-white font-semibold py-3.5 rounded-2xl transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {status === "loading"
+                        ? "Wird gesendet…"
+                        : "Nachricht senden"}
+                    </button>
+                    {error && (
+                      <p className="text-sm text-rose-dark" role="alert">
+                        {error}
+                      </p>
+                    )}
+                    <p className="text-xs text-charcoal-lighter">
+                      Deine Angaben aus diesem Formular nutzen wir
+                      ausschließlich zur Bearbeitung deiner Anfrage. Details:{" "}
+                      <a
+                        href="/datenschutz"
+                        className="underline hover:text-lavender-dark"
+                      >
+                        Datenschutzerklärung
+                      </a>
+                      .
+                    </p>
+                  </form>
+                </>
+              )}
             </motion.div>
           </div>
         </div>

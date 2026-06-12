@@ -9,6 +9,9 @@ function getAuth() {
   return "Basic " + Buffer.from(`${username}:${password}`).toString("base64");
 }
 
+// Klarna antwortet je nach Endpoint mit JSON-Body ODER leerem Body
+// (z. B. 204 bei acknowledge, 201 bei captures). Leere Bodies dürfen
+// res.json() nicht zum Absturz bringen.
 export async function klarnaFetch(path: string, options: RequestInit = {}) {
   const res = await fetch(`${KLARNA_API}${path}`, {
     ...options,
@@ -25,5 +28,11 @@ export async function klarnaFetch(path: string, options: RequestInit = {}) {
     throw new Error(`Klarna API error: ${res.status}`);
   }
 
-  return res.json();
+  const text = await res.text();
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
 }

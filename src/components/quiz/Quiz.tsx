@@ -23,6 +23,7 @@ export function Quiz({ headline }: { headline: string }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [result, setResult] = useState<QuizResult | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   function handleStart() {
     setStep("questions");
@@ -49,12 +50,26 @@ export function Quiz({ headline }: { headline: string }) {
     }
   }
 
-  function handleEmailSubmit(e: React.FormEvent) {
+  async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (submitting) return;
     const dominant = evaluateQuiz(answers);
+
+    // Fire-and-forget: Fehler werden ignoriert, das Ergebnis kommt immer.
+    setSubmitting(true);
+    try {
+      await fetch("/api/quiz-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, result: dominant, website: "" }),
+      });
+    } catch (err) {
+      console.warn("Quiz-Lead konnte nicht gesendet werden:", err);
+    }
+    setSubmitting(false);
+
     setResult(quizResults[dominant]);
     setStep("result");
-    // TODO: Send email + result to DigiLetter API
   }
 
   function handleSkipEmail() {
@@ -93,6 +108,7 @@ export function Quiz({ headline }: { headline: string }) {
               onNameChange={setName}
               onSubmit={handleEmailSubmit}
               onSkip={handleSkipEmail}
+              submitting={submitting}
             />
           )}
           {step === "result" && result && (
@@ -232,6 +248,7 @@ function EmailStep({
   onNameChange,
   onSubmit,
   onSkip,
+  submitting,
 }: {
   email: string;
   name: string;
@@ -239,6 +256,7 @@ function EmailStep({
   onNameChange: (v: string) => void;
   onSubmit: (e: React.FormEvent) => void;
   onSkip: () => void;
+  submitting: boolean;
 }) {
   return (
     <motion.div
@@ -276,8 +294,13 @@ function EmailStep({
           onChange={(e) => onEmailChange(e.target.value)}
           className="w-full px-5 py-3.5 rounded-2xl border-2 border-lavender/20 bg-white text-charcoal placeholder:text-charcoal-lighter focus:outline-none focus:border-lavender/50 transition-colors"
         />
-        <Button type="submit" size="lg" className="w-full">
-          Ergebnis anzeigen
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full disabled:opacity-60 disabled:cursor-not-allowed"
+          disabled={submitting}
+        >
+          {submitting ? "Einen Moment…" : "Ergebnis anzeigen"}
         </Button>
       </form>
 
@@ -289,7 +312,9 @@ function EmailStep({
       </button>
 
       <p className="mt-6 text-xs text-charcoal-lighter max-w-xs mx-auto">
-        Kein Spam. Du kannst dich jederzeit abmelden.
+        Kein Spam. Nach dem Absenden bekommst du eine Bestätigungs-Mail
+        (Double-Opt-in). Versand über unseren Dienstleister DigiLetter, du
+        kannst dich jederzeit abmelden.
         Lies unsere{" "}
         <a href="/datenschutz" className="underline hover:text-lavender-dark">
           Datenschutzerklärung

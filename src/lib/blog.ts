@@ -218,6 +218,17 @@ export const blogPosts: BlogPost[] = [
       "/images/blog/wie-kann-ich-die-emotionale-entwicklung-meines-kindes-unterstutzen/featured.webp",
   },
   {
+    slug: "wie-foerdert-man-empathie-bei-kindern",
+    title: "Wie fördert man Empathie bei Kindern?",
+    excerpt:
+      "Empathie ist ein wertvoller Begleiter durchs Leben. Erfahre, wie sich das Einfühlungsvermögen deines Kindes entwickelt und wie du es mit fünf Tipps förderst.",
+    date: "2022-08-10",
+    readTime: "5 Min.",
+    categories: ["Eltern", "Empathie", "Erziehung", "Gefühle"],
+    image:
+      "/images/blog/gefuehle-von-kindern-ernst-nehmen-und-verstehen/featured.webp",
+  },
+  {
     slug: "wieso-du-ueber-deine-gefuehle-mit-deinem-kind-sprechen-solltest",
     title: "Wieso du über deine Gefühle mit deinem Kind sprechen solltest?",
     excerpt:

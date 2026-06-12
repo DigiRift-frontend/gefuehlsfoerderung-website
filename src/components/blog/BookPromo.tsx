@@ -10,7 +10,7 @@ export function BookPromo() {
         <div className="sm:w-2/5 relative bg-gold/5">
           <div className="aspect-[4/3] sm:aspect-auto sm:h-full relative">
             <Image
-              src="/images/products/bundle-gefuehle.jpg"
+              src="/images/products/bundle-emotionen-entdecken.jpg"
               alt="Emotionen Entdecken – Buch und Leitfaden Bundle"
               fill
               className="object-contain p-4"
@@ -33,10 +33,10 @@ export function BookPromo() {
             Leitfaden für Eltern.
           </p>
           <Link
-            href="/shop"
+            href="/shop/emotionen-entdecken-bundle"
             className="mt-5 inline-flex items-center gap-2 self-start rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gold-dark transition-colors"
           >
-            Zum Shop
+            Zum Bundle
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
