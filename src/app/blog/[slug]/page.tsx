@@ -21,11 +21,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const url = `${SITE_URL}/blog/${post.slug}`;
   const imageUrl = `${SITE_URL}${post.image}`;
+  // Kurzer SEO-Titel fuers <title>-Tag; "absolute" unterdrueckt das " | Gefuehlsfoerderung"-Suffix,
+  // damit der Titel nicht in den Suchergebnissen abgeschnitten wird.
+  const metaTitle = post.seoTitle ?? post.title;
 
   return {
-    title: post.title,
+    title: { absolute: metaTitle },
     description: post.excerpt,
-    keywords: post.categories,
+    keywords: [...(post.keywords ?? []), ...post.categories],
     authors: [{ name: "Ewelina Gawlik", url: `${SITE_URL}/ueber-ewelina` }],
     alternates: {
       canonical: url,
@@ -76,12 +79,18 @@ function BlogPostingJsonLd({ post }: { post: (typeof blogPosts)[number] }) {
       "@type": "Organization",
       name: "Gefühlsförderung",
       url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/images/logo/logo.jpg`,
+        width: 369,
+        height: 77,
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${SITE_URL}/blog/${post.slug}`,
     },
-    keywords: post.categories.join(", "),
+    keywords: [...(post.keywords ?? []), ...post.categories].join(", "),
   };
 
   return (

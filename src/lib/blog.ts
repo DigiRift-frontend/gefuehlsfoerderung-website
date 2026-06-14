@@ -1,11 +1,15 @@
 export type BlogPost = {
   slug: string;
   title: string;
+  /** Kurzer SEO-Titel fuer das <title>-Tag (<= 60 Zeichen). Faellt auf title zurueck. */
+  seoTitle?: string;
   excerpt: string;
   date: string;
   modifiedDate?: string;
   readTime: string;
   categories: string[];
+  /** Such-Keywords (Haupt- und Nebenkeywords) zusaetzlich zu den Kategorien. */
+  keywords?: string[];
   image: string;
   /** Entwurf: nur lokal (next dev) sichtbar, nie in Production, Sitemap oder RSS. */
   draft?: boolean;
@@ -22,6 +26,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 Min.",
     categories: ["Beziehung", "Eltern", "Gefühle", "Gewaltfreie Kommunikation"],
     image: "/images/blog/gewaltfreie-kommunikation-mit-kindern/featured.jpg",
+    seoTitle: "Gewaltfreie Kommunikation mit Kindern: 4 Schritte",
+    keywords: ["gewaltfreie kommunikation mit kindern", "gewaltfreie kommunikation kinder", "wertschätzend kommunizieren kind", "kommunikation nach Rosenberg"],
     draft: true,
   },
   {
@@ -34,6 +40,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Eltern", "Erziehung", "Gewaltfreie Kommunikation"],
     image: "/images/blog/ich-botschaften-statt-du-botschaften/featured.jpg",
+    seoTitle: "Ich-Botschaften: sagen, was du brauchst",
+    keywords: ["ich-botschaften", "ich botschaften kinder", "du-botschaften", "wertfrei kommunizieren kind"],
     draft: true,
   },
   {
@@ -45,6 +53,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 Min.",
     categories: ["Beziehung", "Eltern", "Gewaltfreie Kommunikation"],
     image: "/images/blog/aktiv-zuhoeren-bei-kindern/featured.jpg",
+    keywords: ["aktiv zuhören kind", "aktives zuhören kinder", "gefühle spiegeln kind", "kind verstanden fühlen"],
     draft: true,
   },
   {
@@ -56,6 +65,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "9 Min.",
     categories: ["Beziehung", "Erziehung", "Grenzen"],
     image: "/images/blog/grenzen-setzen-die-halt-geben/featured.jpg",
+    keywords: ["grenzen setzen kind", "liebevoll grenzen setzen", "grenzen kleinkind", "meine grenze ist dein halt"],
     draft: true,
   },
   {
@@ -68,6 +78,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Beziehung", "Erziehung", "Gefühle"],
     image: "/images/blog/beduerfnisorientierte-erziehung/featured.jpg",
+    seoTitle: "Bedürfnisorientierte Erziehung einfach erklärt",
+    keywords: ["bedürfnisorientierte erziehung", "bedürfnisorientiert", "bedürfnis hinter verhalten", "beziehungsorientierte erziehung"],
     draft: true,
   },
   {
@@ -80,6 +92,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Eltern", "Erziehung", "Grenzen"],
     image: "/images/blog/nein-sagen-ohne-schlechtes-gewissen/featured.jpg",
+    seoTitle: "Nein sagen ohne schlechtes Gewissen",
+    keywords: ["nein sagen kind", "nein sagen ohne schlechtes gewissen", "nein aus liebe", "grenzen zeigen kind"],
     draft: true,
   },
   {
@@ -91,6 +105,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 Min.",
     categories: ["Eltern", "Erziehung", "Selbstwertgefühl"],
     image: "/images/blog/kinder-richtig-loben/featured.jpg",
+    keywords: ["kinder richtig loben", "kind loben", "beschreibendes lob", "lob statt belohnung"],
     draft: true,
   },
   {
@@ -103,6 +118,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 Min.",
     categories: ["Beziehung", "Erziehung", "Gefühle"],
     image: "/images/blog/kind-luegt-was-tun/featured.jpg",
+    seoTitle: "Mein Kind lügt: warum und wie du reagierst",
+    keywords: ["kind lügt", "warum lügen kinder", "kind lügt was tun", "kind schwindelt"],
     draft: true,
   },
   {
@@ -114,6 +131,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 Min.",
     categories: ["Erziehung", "Gefühle", "Gewaltfreie Kommunikation"],
     image: "/images/blog/kind-sagt-schimpfwoerter/featured.jpg",
+    keywords: ["kind sagt schimpfwörter", "kind flucht", "schimpfwörter kindergarten", "kind sagt böse wörter"],
     draft: true,
   },
   {
@@ -125,6 +143,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Emotionale Intelligenz", "Gefühle", "Gefühlswelt"],
     image: "/images/blog/gefuehle-benennen-lernen/featured.jpg",
+    seoTitle: "Gefühle benennen lernen mit deinem Kind",
+    keywords: ["gefühle benennen kind", "gefühlswortschatz kind", "emotionen benennen kind", "affect labeling"],
     draft: true,
   },
   {
@@ -136,6 +156,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Beziehung", "Eltern", "Erziehung", "Gefühle"],
     image: "/images/blog/kind-hoert-nicht-zu/featured.jpg",
+    keywords: ["kind hört nicht", "kind hört nicht zu", "mein kind hört nicht auf mich", "kind ignoriert mich"],
     draft: true,
   },
   {
@@ -147,6 +168,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Eltern", "Erziehung", "Gefühle", "Grenzen", "Wutanfälle"],
     image: "/images/blog/mein-kind-schlaegt-mich/featured.jpg",
+    seoTitle: "Mein Kind schlägt mich: Warum und was wirklich hilft",
+    keywords: ["mein kind schlägt mich", "kind schlägt eltern", "kleinkind schlägt mutter", "aggressives verhalten kleinkind"],
     draft: true,
   },
   {
@@ -158,6 +181,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Beziehung", "Eltern", "Gefühle", "Schlaf"],
     image: "/images/blog/wieso-schlaeft-mein-kind-nicht-ein/featured.jpg",
+    seoTitle: "Kind schläft nicht ein: Gefühle als Schlafblocker",
+    keywords: ["kind schläft nicht ein", "kind will nicht schlafen", "einschlafprobleme bei kindern", "einschlafbegleitung"],
     draft: true,
   },
   {
@@ -169,6 +194,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Eltern", "Gefühle", "Gefühlswelt", "Wutanfälle"],
     image: "/images/blog/kind-beruhigen-co-regulation/featured.jpg",
+    keywords: ["kind beruhigen", "co-regulation kinder", "kind lässt sich nicht beruhigen", "wutanfall kind beruhigen"],
     draft: true,
   },
   {
@@ -180,6 +206,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 Min.",
     categories: ["Erziehung", "Gefühle", "Grenzen", "Wutanfälle"],
     image: "/images/blog/trotzphase-autonomiephase/featured.jpg",
+    seoTitle: "Trotzphase verstehen: die Autonomiephase begleiten",
+    keywords: ["trotzphase", "autonomiephase", "wutanfall kleinkind", "trotzphase wie lange"],
     draft: true,
   },
   {
@@ -191,6 +219,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Beziehung", "Erziehung", "Gefühle", "Wutanfälle"],
     image: "/images/blog/kind-sagt-ich-hasse-dich/featured.jpg",
+    keywords: ["kind sagt ich hasse dich", "mama ich hasse dich", "kind beleidigt eltern", "kind beschimpft mutter"],
     draft: true,
   },
   {
@@ -202,6 +231,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Eltern", "Gefühle", "Gefühlswelt", "Hochsensibilität"],
     image: "/images/blog/kind-weint-wegen-jeder-kleinigkeit/featured.jpg",
+    keywords: ["kind weint wegen jeder kleinigkeit", "kind weint ständig", "frustrationstoleranz bei kindern", "warum weint mein kind so viel"],
     draft: true,
   },
   {
@@ -213,6 +243,7 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 Min.",
     categories: ["Beziehung", "Eltern", "Gefühle", "Wutanfälle"],
     image: "/images/blog/wut-auf-das-eigene-kind/featured.jpg",
+    keywords: ["wut auf das eigene kind", "kind angeschrien schlechtes gewissen", "ruhig bleiben mit kindern", "erziehen ohne schreien"],
     draft: true,
   },
   {
@@ -229,6 +260,8 @@ export const blogPosts: BlogPost[] = [
       "Gewaltfreie Kommunikation",
     ],
     image: "/images/blog/geschwisterstreit-wann-eingreifen/featured.jpg",
+    seoTitle: "Geschwisterstreit: wann eingreifen, wie begleiten?",
+    keywords: ["geschwisterstreit", "streit unter geschwistern", "geschwisterstreit schlichten", "geschwisterrivalität"],
     draft: true,
   },
   {
@@ -240,6 +273,8 @@ export const blogPosts: BlogPost[] = [
     readTime: "7 Min.",
     categories: ["Angst", "Beziehung", "Eltern", "Gefühle"],
     image: "/images/blog/aengste-bei-kindern-begleiten/featured.jpg",
+    seoTitle: "Ängste bei Kindern liebevoll begleiten",
+    keywords: ["ängste bei kindern", "kind hat angst im dunkeln", "trennungsangst kind", "ängstliches kind stärken"],
     draft: true,
   },
   {
