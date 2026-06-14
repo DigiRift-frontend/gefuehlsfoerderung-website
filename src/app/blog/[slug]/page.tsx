@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { blogPosts, getPostBySlug } from "@/lib/blog";
+import { blogPosts, visiblePosts, getPostBySlug } from "@/lib/blog";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import type { Metadata } from "next";
 
@@ -10,7 +10,8 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  return blogPosts.map((p) => ({ slug: p.slug }));
+  // Entwürfe sind nur lokal (next dev) erreichbar — in Production 404.
+  return visiblePosts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -37,8 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: imageUrl,
-          width: 1200,
-          height: 675,
+          width: 1600,
+          height: 900,
           alt: post.title,
         },
       ],

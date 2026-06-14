@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Clock, ArrowRight } from "lucide-react";
-import { blogPosts, blogCategories, formatDate } from "@/lib/blog";
+import { visiblePosts, blogCategories, formatDate } from "@/lib/blog";
 import { cn } from "@/lib/utils";
 
 export function BlogList() {
@@ -13,8 +13,8 @@ export function BlogList() {
 
   const filtered =
     activeCategory === "Alle"
-      ? blogPosts
-      : blogPosts.filter((p) => p.categories.includes(activeCategory));
+      ? visiblePosts
+      : visiblePosts.filter((p) => p.categories.includes(activeCategory));
 
   const colors = [
     "bg-lavender/10",
@@ -85,6 +85,11 @@ export function BlogList() {
                 </div>
 
                 <div className="flex items-center gap-3 mb-3">
+                  {post.draft && (
+                    <span className="text-xs font-semibold text-white bg-amber-500 px-2.5 py-1 rounded-full">
+                      Entwurf
+                    </span>
+                  )}
                   {post.categories.slice(0, 2).map((cat) => (
                     <span
                       key={cat}

@@ -7,9 +7,241 @@ export type BlogPost = {
   readTime: string;
   categories: string[];
   image: string;
+  /** Entwurf: nur lokal (next dev) sichtbar, nie in Production, Sitemap oder RSS. */
+  draft?: boolean;
 };
 
 export const blogPosts: BlogPost[] = [
+  {
+    slug: "gewaltfreie-kommunikation-mit-kindern",
+    title:
+      "Gewaltfreie Kommunikation mit Kindern: Die 4 Schritte für den Familienalltag",
+    excerpt:
+      "Gewaltfreie Kommunikation mit Kindern: Wie du mit den 4 Schritten nach Marshall Rosenberg im Familienalltag klar, verständlich und liebevoll sprichst.",
+    date: "2026-06-14",
+    readTime: "8 Min.",
+    categories: ["Beziehung", "Eltern", "Gefühle", "Gewaltfreie Kommunikation"],
+    image: "/images/blog/gewaltfreie-kommunikation-mit-kindern/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "ich-botschaften-statt-du-botschaften",
+    title:
+      "Ich-Botschaften statt Vorwürfe: So sagst du deinem Kind, was du brauchst",
+    excerpt:
+      "Ich-Botschaften statt Vorwürfe: So sagst du deinem Kind klar, was du fühlst und brauchst, ohne zu beschuldigen. Mit vielen Beispielsätzen für den Alltag.",
+    date: "2026-06-14",
+    readTime: "7 Min.",
+    categories: ["Eltern", "Erziehung", "Gewaltfreie Kommunikation"],
+    image: "/images/blog/ich-botschaften-statt-du-botschaften/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "aktiv-zuhoeren-bei-kindern",
+    title: "Aktiv zuhören: Wie sich dein Kind wirklich verstanden fühlt",
+    excerpt:
+      "Aktiv zuhören lässt dein Kind sich wirklich verstanden fühlen. Wie du Gefühle spiegelst statt vorschnell zu lösen, mit konkreten Dialogbeispielen.",
+    date: "2026-06-13",
+    readTime: "8 Min.",
+    categories: ["Beziehung", "Eltern", "Gewaltfreie Kommunikation"],
+    image: "/images/blog/aktiv-zuhoeren-bei-kindern/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "grenzen-setzen-die-halt-geben",
+    title: "Grenzen setzen, die Halt geben: liebevoll und klar zugleich",
+    excerpt:
+      "Grenzen setzen, die Halt geben: Warum klare Grenzen deinem Kind Sicherheit schenken und wie du sie liebevoll formulierst. Mit vielen Praxisbeispielen.",
+    date: "2026-06-13",
+    readTime: "9 Min.",
+    categories: ["Beziehung", "Erziehung", "Grenzen"],
+    image: "/images/blog/grenzen-setzen-die-halt-geben/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "beduerfnisorientierte-erziehung",
+    title:
+      "Bedürfnisorientierte Erziehung: Was wirklich hinter dem Verhalten steckt",
+    excerpt:
+      "Bedürfnisorientierte Erziehung einfach erklärt: Wie du das Bedürfnis hinter dem Verhalten erkennst und liebevoll begleitest, ohne zu verwöhnen.",
+    date: "2026-06-12",
+    readTime: "7 Min.",
+    categories: ["Beziehung", "Erziehung", "Gefühle"],
+    image: "/images/blog/beduerfnisorientierte-erziehung/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "nein-sagen-ohne-schlechtes-gewissen",
+    title:
+      "Nein sagen ohne schlechtes Gewissen: deinem Kind liebevoll Grenzen zeigen",
+    excerpt:
+      "Nein sagen ohne schlechtes Gewissen: Warum ein klares, liebevolles Nein eure Beziehung stärkt und wie du Grenzen zeigst, die dein Kind versteht.",
+    date: "2026-06-12",
+    readTime: "7 Min.",
+    categories: ["Eltern", "Erziehung", "Grenzen"],
+    image: "/images/blog/nein-sagen-ohne-schlechtes-gewissen/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "kinder-richtig-loben",
+    title: "Kinder richtig loben: Warum „gut gemacht“ oft nicht hilft",
+    excerpt:
+      "Kinder richtig loben: Warum „gut gemacht“ oft nicht hilft und wie beschreibendes Lob den Selbstwert deines Kindes echt stärkt. Mit vielen Lob-Sätzen.",
+    date: "2026-06-11",
+    readTime: "8 Min.",
+    categories: ["Eltern", "Erziehung", "Selbstwertgefühl"],
+    image: "/images/blog/kinder-richtig-loben/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "kind-luegt-was-tun",
+    title:
+      "Mein Kind lügt: Warum Kinder schwindeln und wie du gelassen reagierst",
+    excerpt:
+      "Mein Kind lügt: Warum Kinder schwindeln, was altersgerecht normal ist und wie du gelassen und ohne Beschämung reagierst. Mit konkreten Beispielen.",
+    date: "2026-06-11",
+    readTime: "8 Min.",
+    categories: ["Beziehung", "Erziehung", "Gefühle"],
+    image: "/images/blog/kind-luegt-was-tun/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "kind-sagt-schimpfwoerter",
+    title: "Kind sagt Schimpfwörter: Gelassen reagieren statt schimpfen",
+    excerpt:
+      "Kind sagt Schimpfwörter? Warum Kinder fluchen und wie du gelassen statt schimpfend reagierst und klare Grenzen setzt. Mit Beispielen für den Alltag.",
+    date: "2026-06-10",
+    readTime: "8 Min.",
+    categories: ["Erziehung", "Gefühle", "Gewaltfreie Kommunikation"],
+    image: "/images/blog/kind-sagt-schimpfwoerter/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "gefuehle-benennen-lernen",
+    title: "Gefühle benennen lernen: Wie du deinem Kind Gefühlswörter schenkst",
+    excerpt:
+      "Gefühle benennen lernen: Wie du deinem Kind einen Gefühlswortschatz schenkst, damit es Emotionen ausdrücken statt ausagieren kann. Mit Spielideen.",
+    date: "2026-06-10",
+    readTime: "7 Min.",
+    categories: ["Emotionale Intelligenz", "Gefühle", "Gefühlswelt"],
+    image: "/images/blog/gefuehle-benennen-lernen/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "kind-hoert-nicht-zu",
+    title: "Kind hört nicht zu: 5 Schritte, wie du dein Kind erreichst",
+    excerpt:
+      "Dein Kind hört nicht? Erfahre die echten Gründe aus der Entwicklungspsychologie und 5 einfache Schritte, mit denen du dein Kind wirklich erreichst.",
+    date: "2026-06-13",
+    readTime: "7 Min.",
+    categories: ["Beziehung", "Eltern", "Erziehung", "Gefühle"],
+    image: "/images/blog/kind-hoert-nicht-zu/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "mein-kind-schlaegt-mich",
+    title: "Mein Kind schlägt mich: Warum es passiert und was wirklich hilft",
+    excerpt:
+      "Mein Kind schlägt mich: Warum kleine Kinder hauen und wie du in 4 Schritten ruhig reagierst, ohne zu strafen. Mit Soforthilfe und Tipps zur Vorbeugung.",
+    date: "2026-06-12",
+    readTime: "7 Min.",
+    categories: ["Eltern", "Erziehung", "Gefühle", "Grenzen", "Wutanfälle"],
+    image: "/images/blog/mein-kind-schlaegt-mich/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "wieso-schlaeft-mein-kind-nicht-ein",
+    title: "Wieso schläft mein Kind nicht ein? Gefühle als Schlafblocker",
+    excerpt:
+      "Wieso schläft mein Kind nicht ein? Oft blockieren Gefühle den Schlaf. Wie du mit Abendroutine und Gefühlsrunde ohne Machtkampf zur Ruhe findest.",
+    date: "2026-06-11",
+    readTime: "7 Min.",
+    categories: ["Beziehung", "Eltern", "Gefühle", "Schlaf"],
+    image: "/images/blog/wieso-schlaeft-mein-kind-nicht-ein/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "kind-beruhigen-co-regulation",
+    title: "Kind beruhigen: Co-Regulation einfach erklärt (5 Schritte)",
+    excerpt:
+      "Kind beruhigen mit Co-Regulation: Warum dein Kind deine Ruhe braucht und wie der 5-Schritte-Plan in Wut und Tränen hilft. Mit Atemspielen für den Alltag.",
+    date: "2026-06-10",
+    readTime: "7 Min.",
+    categories: ["Eltern", "Gefühle", "Gefühlswelt", "Wutanfälle"],
+    image: "/images/blog/kind-beruhigen-co-regulation/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "trotzphase-autonomiephase",
+    title: "Trotzphase verstehen: Warum die Autonomiephase so wichtig ist",
+    excerpt:
+      "Trotzphase oder Autonomiephase? Warum Wutanfälle ein wichtiger Entwicklungsschritt sind und wie du dein Kind liebevoll begleitest. Mit Praxistipps.",
+    date: "2026-06-09",
+    readTime: "8 Min.",
+    categories: ["Erziehung", "Gefühle", "Grenzen", "Wutanfälle"],
+    image: "/images/blog/trotzphase-autonomiephase/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "kind-sagt-ich-hasse-dich",
+    title: "Kind sagt ich hasse dich: Was dahinter steckt und was hilft",
+    excerpt:
+      "Dein Kind sagt ich hasse dich? Was wirklich hinter den verletzenden Worten steckt und wie du in 4 Schritten ruhig und liebevoll reagierst.",
+    date: "2026-06-06",
+    readTime: "7 Min.",
+    categories: ["Beziehung", "Erziehung", "Gefühle", "Wutanfälle"],
+    image: "/images/blog/kind-sagt-ich-hasse-dich/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "kind-weint-wegen-jeder-kleinigkeit",
+    title: "Kind weint wegen jeder Kleinigkeit: Ist das normal?",
+    excerpt:
+      "Dein Kind weint wegen jeder Kleinigkeit? Warum Tränen gesunde Emotionsregulation sind und wie du dein Kind in 4 Schritten liebevoll begleitest.",
+    date: "2026-06-05",
+    readTime: "7 Min.",
+    categories: ["Eltern", "Gefühle", "Gefühlswelt", "Hochsensibilität"],
+    image: "/images/blog/kind-weint-wegen-jeder-kleinigkeit/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "wut-auf-das-eigene-kind",
+    title: "Wut auf das eigene Kind: Ruhig bleiben in 5 Schritten",
+    excerpt:
+      "Wut auf das eigene Kind ist normal und kein Versagen. Mit 5-Schritte-Notfallplan und ehrlicher Reparatur nach dem Anschreien stärkst du sogar eure Bindung.",
+    date: "2026-06-04",
+    readTime: "8 Min.",
+    categories: ["Beziehung", "Eltern", "Gefühle", "Wutanfälle"],
+    image: "/images/blog/wut-auf-das-eigene-kind/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "geschwisterstreit-wann-eingreifen",
+    title: "Geschwisterstreit: Wann eingreifen und wie richtig begleiten?",
+    excerpt:
+      "Geschwisterstreit nervt? Erfahre, warum Streit unter Geschwistern normal ist, wann du eingreifen solltest und wie du Konflikte fair begleitest.",
+    date: "2026-06-03",
+    readTime: "7 Min.",
+    categories: [
+      "Beziehung",
+      "Erziehung",
+      "Geschwister",
+      "Gewaltfreie Kommunikation",
+    ],
+    image: "/images/blog/geschwisterstreit-wann-eingreifen/featured.jpg",
+    draft: true,
+  },
+  {
+    slug: "aengste-bei-kindern-begleiten",
+    title: "Ängste bei Kindern: So begleitest du dein Kind durch die Angst",
+    excerpt:
+      "Ängste bei Kindern sind normal: Hier erfährst du, welche Ängste in welchem Alter typisch sind und wie du dein Kind liebevoll durch die Angst begleitest.",
+    date: "2026-06-02",
+    readTime: "7 Min.",
+    categories: ["Angst", "Beziehung", "Eltern", "Gefühle"],
+    image: "/images/blog/aengste-bei-kindern-begleiten/featured.jpg",
+    draft: true,
+  },
   {
     slug: "12-schluesselfragen-zur-staerkung-der-bindung-mit-deinem-kind",
     title: "12 Schlüsselfragen zur Stärkung der Bindung mit deinem Kind",
@@ -262,10 +494,18 @@ export const blogPosts: BlogPost[] = [
   },
 ];
 
+/** Veröffentlichte Posts (ohne Entwürfe) — für Sitemap und RSS-Feed. */
+export const publishedPosts: BlogPost[] = blogPosts.filter((p) => !p.draft);
+
+/** Sichtbare Posts: lokal (next dev) inkl. Entwürfe, in Production nur veröffentlichte. */
+export const visiblePosts: BlogPost[] =
+  process.env.NODE_ENV === "production" ? publishedPosts : blogPosts;
+
 export const blogCategories = [
   "Alle",
   "Achtsamkeit",
   "Akzeptanz",
+  "Angst",
   "Beziehung",
   "Eltern",
   "Emotionale Intelligenz",
@@ -274,10 +514,12 @@ export const blogCategories = [
   "Familie",
   "Gefühle",
   "Gefühlswelt",
+  "Geschwister",
   "Gewaltfreie Kommunikation",
   "Grenzen",
   "Hochsensibilität",
   "Krieg",
+  "Schlaf",
   "Selbstbewusstsein",
   "Selbstständigkeit",
   "Selbstwertgefühl",
@@ -301,7 +543,7 @@ export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
   const post = getPostBySlug(slug);
   if (!post) return [];
 
-  return blogPosts
+  return visiblePosts
     .filter((p) => p.slug !== slug)
     .map((p) => ({
       post: p,
