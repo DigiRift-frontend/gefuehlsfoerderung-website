@@ -34,6 +34,14 @@ const assets: DigitalAsset[] = [
     label: "Leitfaden zur emotionalen Entwicklung (PDF)",
     fileName: "leitfaden-emotionale-entwicklung.pdf",
   },
+  // Newsletter-Lead-Magnet (kostenlos). Kein Shop-Produkt — wird nur über
+  // die Bestätigungsseite /newsletter/bestaetigt per signiertem Token
+  // ausgeliefert.
+  {
+    productId: "freebie-newsletter",
+    label: 'Mini-Guide „5 Sätze, die jedes Kind beruhigen" (PDF)',
+    fileName: "newsletter-mini-guide.pdf",
+  },
 ];
 
 // Bundles enthalten den Leitfaden zur emotionalen Entwicklung als digitalen Teil

@@ -4,8 +4,9 @@ import { useCart } from "@/context/CartContext";
 import { getProduct } from "@/lib/cart";
 import { products } from "@/lib/products";
 import { SHIPPING_AMOUNT_CENTS } from "@/lib/order-lines";
+import { getBumpOffer, type BumpOffer } from "@/lib/order-bump";
 import { formatPrice } from "@/lib/utils";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { ShoppingBag, ArrowLeft, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,7 +37,8 @@ declare global {
 }
 
 export default function CheckoutPage() {
-  const { items, cartTotal, cartCount, mounted, clearCart } = useCart();
+  const { items, cartTotal, cartCount, mounted, clearCart, addToCart, removeFromCart } =
+    useCart();
   const [phase, setPhase] = useState<"loading" | "ready" | "paying" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
   const [sdkReady, setSdkReady] = useState(false);
@@ -61,6 +63,32 @@ export default function CheckoutPage() {
     return type === "digital" || type === "mixed";
   });
   const payBlocked = hasDigital && !digitalConsent;
+
+  // Order Bump: einmalig anhand des Ausgangs-Warenkorbs auflösen und
+  // dann „einfrieren" — sonst verschwindet das Angebot, sobald es
+  // angehakt (= in den Cart gelegt) wurde.
+  const [bump, setBump] = useState<BumpOffer | null>(null);
+  const bumpResolved = useRef(false);
+  useEffect(() => {
+    if (bumpResolved.current || !mounted || items.length === 0) return;
+    bumpResolved.current = true;
+    setBump(getBumpOffer(items));
+  }, [mounted, items]);
+  const bumpChecked = bump
+    ? items.some((i) => i.productId === bump.productId)
+    : false;
+  function toggleBump() {
+    if (!bump) return;
+    // Während eine Autorisierung läuft, den Warenkorb NICHT verändern —
+    // sonst passt das Klarna-Authorization-Token nicht mehr zum Betrag.
+    if (phase === "paying") return;
+    // Cart-Änderung baut die Klarna-Session über den items-Effekt neu auf.
+    // setPhase("loading") blendet das alte Widget aus; der frische
+    // Container (key=clientToken) verhindert ein verwaistes Klarna-Widget.
+    setPhase("loading");
+    if (bumpChecked) removeFromCart(bump.productId);
+    else addToCart(bump.productId);
+  }
 
   // 1. Create Klarna session once cart is available
   useEffect(() => {
@@ -160,14 +188,16 @@ export default function CheckoutPage() {
             const orderRes = await fetch("/api/checkout/authorize", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
+              // Betrag/Positionen NICHT vom Client senden — der Server
+              // (/api/checkout/authorize) berechnet beides autoritativ aus
+              // items neu. So kann ein Order-Bump-Wechsel keinen veralteten
+              // Betrag durchschmuggeln.
               body: JSON.stringify({
                 authorizationToken: res.authorization_token,
                 items: items.map((i) => ({
                   productId: i.productId,
                   quantity: i.quantity,
                 })),
-                orderAmount: sessionData.orderAmount,
-                orderLines: sessionData.orderLines,
               }),
             });
 
@@ -326,11 +356,37 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {/* Klarna widget */}
+                {/* Klarna widget — key=clientToken erzwingt einen frischen
+                    DOM-Container bei jedem Session-Neuaufbau (z. B. Order
+                    Bump an/aus), damit das Widget nicht doppelt initialisiert
+                    wird. */}
                 <div
+                  key={sessionData?.clientToken ?? "empty"}
                   id="klarna-payments-container"
                   className={phase === "loading" ? "hidden" : "min-h-[200px]"}
                 />
+
+                {/* Order Bump — bundle-aware, echter Produktpreis */}
+                {bump && (
+                  <label className="mt-6 flex items-start gap-3 bg-gold/5 border-2 border-dashed border-gold/40 rounded-2xl p-4 cursor-pointer hover:bg-gold/10 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={bumpChecked}
+                      onChange={toggleBump}
+                      disabled={phase === "paying"}
+                      className="mt-0.5 h-4 w-4 accent-gold-dark flex-shrink-0 disabled:opacity-50"
+                    />
+                    <span className="text-sm text-charcoal leading-relaxed">
+                      <strong className="text-gold-dark">
+                        Beliebte Ergänzung:
+                      </strong>{" "}
+                      {bump.microcopy}{" "}
+                      <strong className="whitespace-nowrap">
+                        +{formatPrice(bump.priceCents / 100)}
+                      </strong>
+                    </span>
+                  </label>
+                )}
 
                 {/* Digital-Consent (§356 Abs. 5 BGB) */}
                 {hasDigital && (

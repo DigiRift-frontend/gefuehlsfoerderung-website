@@ -1,9 +1,9 @@
-import { blogPosts } from "@/lib/blog";
+import { publishedPosts } from "@/lib/blog";
 
 const SITE_URL = "https://gefühlsförderung.de";
 
 export async function GET() {
-  const items = blogPosts
+  const items = publishedPosts
     .map(
       (post) => `
     <item>

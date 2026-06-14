@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
-import { blogPosts } from "@/lib/blog";
-import { products } from "@/lib/products";
+import { publishedPosts } from "@/lib/blog";
+import { visibleProducts } from "@/lib/products";
 
 const SITE_URL = "https://gefühlsförderung.de";
 
@@ -66,14 +66,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+  const blogPages: MetadataRoute.Sitemap = publishedPosts.map((post) => ({
     url: `${SITE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "monthly",
     priority: 0.8,
   }));
 
-  const shopPages: MetadataRoute.Sitemap = products.map((product) => ({
+  const shopPages: MetadataRoute.Sitemap = visibleProducts.map((product) => ({
     url: `${SITE_URL}/shop/${product.slug}`,
     changeFrequency: "monthly",
     priority: 0.7,

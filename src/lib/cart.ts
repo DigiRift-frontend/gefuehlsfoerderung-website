@@ -42,6 +42,19 @@ export function updateQuantity(
   );
 }
 
+// Bundle-Upgrade: ersetzt die angegebenen Einzelartikel durch ein
+// bestehendes Bundle-SKU (qty 1). Der Preis ist der reale Bundle-Preis
+// aus products.ts — calculateOrder rechnet serverseitig autoritativ.
+export function swapToBundle(
+  items: CartItem[],
+  bundleId: string,
+  replaceIds: string[]
+): CartItem[] {
+  const kept = items.filter((i) => !replaceIds.includes(i.productId));
+  if (kept.some((i) => i.productId === bundleId)) return kept; // schon drin
+  return [...kept, { productId: bundleId, quantity: 1 }];
+}
+
 export function getCartTotal(items: CartItem[]): number {
   return items.reduce((total, item) => {
     const product = getProduct(item.productId);

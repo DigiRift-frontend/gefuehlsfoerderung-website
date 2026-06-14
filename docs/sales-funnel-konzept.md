@@ -1,3 +1,10 @@
+> ⚠️ **VERALTET / ÜBERHOLT (Stand 14.06.2026).**
+> Dieses Dokument enthält bekannte Fehler: **Stripe** (tatsächlich Klarna + PayPal), **5 Leitfäden** (tatsächlich nur 3 im Shop), Rabatt-/„statt"-Aktionen **ohne Coupon-System**.
+> **Ersetzt durch → [`funnel-upsell-konzept.md`](./funnel-upsell-konzept.md)** (korrigierte Fakten, Recht-Leitplanken, Umsetzungs-Roadmap).
+> Nur noch als Historie aufbewahrt — **nicht** als Umsetzungsgrundlage verwenden.
+
+---
+
 # Sales Funnel Konzept - Gefuehlsfoerderung.de
 
 Basierend auf DotCom Secrets (Russell Brunson). Erstellt am 30.03.2026.

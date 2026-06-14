@@ -2,6 +2,7 @@
 
 import { Mail, Check } from "lucide-react";
 import { useNewsletterForm } from "@/lib/useNewsletterForm";
+import { NewsletterCoreOffer } from "@/components/sections/NewsletterCoreOffer";
 
 export function NewsletterSignup() {
   const {
@@ -42,6 +43,7 @@ export function NewsletterSignup() {
           <p className="mt-2 text-sm text-charcoal-light">
             Schau in dein Postfach und bestätige deine E-Mail-Adresse.
           </p>
+          <NewsletterCoreOffer />
         </>
       ) : (
         <>

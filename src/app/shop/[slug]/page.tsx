@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { products, getProductBySlug } from "@/lib/products";
+import { products, visibleProducts, getProductBySlug } from "@/lib/products";
 import { ProductDetail } from "@/components/shop/ProductDetail";
 import type { Metadata } from "next";
 
@@ -10,7 +10,9 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  // Versteckte Funnel-SKUs werden nicht statisch vorgerendert/verlinkt;
+  // sie sind nur über direkte Funnel-Links erreichbar.
+  return visibleProducts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -133,7 +135,7 @@ export default async function ProductPage({ params }: Props) {
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = products
+  const related = visibleProducts
     .filter((p) => p.id !== product.id && p.category === product.category)
     .slice(0, 3);
 

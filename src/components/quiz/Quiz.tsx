@@ -12,6 +12,7 @@ import {
 } from "@/lib/quiz";
 import { products } from "@/lib/products";
 import { formatPrice } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
 import Image from "next/image";
 
 type QuizStep = "intro" | "questions" | "email" | "result";
@@ -327,6 +328,7 @@ function EmailStep({
 
 function ResultStep({ result }: { result: QuizResult }) {
   const [copied, setCopied] = useState(false);
+  const { addToCart, setCartOpen } = useCart();
   const recommendedProducts = result.productIds
     .map((id) => products.find((p) => p.id === id))
     .filter(Boolean);
@@ -365,35 +367,51 @@ function ResultStep({ result }: { result: QuizResult }) {
           >
             {recommendedProducts.map((product) =>
               product ? (
-                <a
+                <div
                   key={product.id}
-                  href={`/shop/${product.slug}`}
-                  className="block rounded-2xl border-2 border-lavender/15 bg-white p-5 hover:border-lavender/40 hover:shadow-md transition-all duration-200 group"
+                  className="flex flex-col rounded-2xl border-2 border-lavender/15 bg-white p-5 hover:border-lavender/40 hover:shadow-md transition-all duration-200"
                 >
-                  <div className="aspect-[4/3] rounded-xl bg-gradient-to-br from-lavender/10 to-rose/10 overflow-hidden relative mb-4">
-                    <Image
-                      src={product.images[0]}
-                      alt={product.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, 50vw"
-                    />
-                  </div>
-                  <h4 className="font-bold text-charcoal">{product.title}</h4>
-                  <p className="text-sm text-charcoal-light mt-1 line-clamp-2">
-                    {product.description}
-                  </p>
+                  <a href={`/shop/${product.slug}`} className="block group">
+                    <div className="aspect-[4/3] rounded-xl bg-gradient-to-br from-lavender/10 to-rose/10 overflow-hidden relative mb-4">
+                      <Image
+                        src={product.images[0]}
+                        alt={product.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                      />
+                    </div>
+                    <h4 className="font-bold text-charcoal">{product.title}</h4>
+                    <p className="text-sm text-charcoal-light mt-1 line-clamp-2">
+                      {product.description}
+                    </p>
+                  </a>
                   <div className="mt-3 flex items-center gap-2">
                     <span className="text-lg font-bold text-lavender-dark">
                       {formatPrice(product.price)}
                     </span>
-                    {product.originalPrice && (
-                      <span className="text-sm text-charcoal-lighter line-through">
-                        {formatPrice(product.originalPrice)}
-                      </span>
-                    )}
+                    <span className="text-xs text-charcoal-lighter">
+                      Gesamtpreis · §19 UStG
+                    </span>
                   </div>
-                </a>
+                  <div className="mt-4 flex gap-2">
+                    <button
+                      onClick={() => {
+                        addToCart(product.id);
+                        setCartOpen(true);
+                      }}
+                      className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-lavender px-4 py-2.5 text-sm font-semibold text-white hover:bg-lavender-dark transition-colors active:scale-[0.98]"
+                    >
+                      In den Warenkorb
+                    </button>
+                    <a
+                      href={`/shop/${product.slug}`}
+                      className="inline-flex items-center justify-center rounded-xl border-2 border-lavender/25 px-4 py-2.5 text-sm font-semibold text-lavender-dark hover:bg-lavender/5 transition-colors"
+                    >
+                      Details
+                    </a>
+                  </div>
+                </div>
               ) : null
             )}
           </div>

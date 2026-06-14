@@ -1,3 +1,10 @@
+> ⚠️ **VERALTET / ÜBERHOLT (Stand 14.06.2026).**
+> Diese Analyse listet u. a. Produkte, die es im Shop nicht gibt (Leitfaden „eigene Muster" / „Kinderangst"), und Annahmen, die nicht mehr stimmen.
+> **Ersetzt durch → [`funnel-upsell-konzept.md`](./funnel-upsell-konzept.md)** (aktueller Ist-Zustand, korrigierte Fakten, Roadmap).
+> Nur noch als Historie aufbewahrt.
+
+---
+
 # Gesamtkonzept: Gefühlsförderung — Analyse, Kohärenz & Werbestrategie
 
 ## Context

@@ -2,9 +2,10 @@
 
 import { useCart } from "@/context/CartContext";
 import { getProduct } from "@/lib/cart";
+import { getBundleUpgrade, getBumpOffer } from "@/lib/order-bump";
 import { formatPrice } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Minus, Plus, Trash2, ShoppingBag, CreditCard } from "lucide-react";
+import { X, Minus, Plus, Trash2, ShoppingBag, CreditCard, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,8 +14,10 @@ import { useState } from "react";
 export function CartDrawer() {
   const {
     items,
+    addToCart,
     removeFromCart,
     setQuantity,
+    swapToBundle,
     cartTotal,
     cartCount,
     isCartOpen,
@@ -29,6 +32,14 @@ export function CartDrawer() {
     const type = getProduct(i.productId)?.type;
     return type === "digital" || type === "mixed";
   });
+
+  // Bundle-bewusste Empfehlung: bevorzugt ein Bundle-Upgrade (größte echte
+  // Paket-Ersparnis), sonst die passende Einzel-Ergänzung. Echte Preise,
+  // kein Doppelverkauf.
+  const upgrade = getBundleUpgrade(items);
+  const bump = !upgrade ? getBumpOffer(items) : null;
+  const upgradeImage = upgrade ? getProduct(upgrade.bundleId)?.images[0] : null;
+  const bumpImage = bump ? getProduct(bump.productId)?.images[0] : null;
 
   if (!mounted) return null;
 
@@ -190,6 +201,99 @@ export function CartDrawer() {
                 </div>
               )}
             </div>
+
+            {/* Bundle-Upgrade oder passende Ergänzung (bundle-bewusst) */}
+            {items.length > 0 && upgrade && (
+              <div className="border-t border-lavender/10 px-6 pt-4">
+                <div className="rounded-2xl bg-sage/10 border border-sage/25 p-3">
+                  <p className="flex items-center gap-1.5 text-[11px] font-bold text-sage-dark uppercase tracking-wide">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Lieber das ganze Set?
+                  </p>
+                  <div className="mt-2 flex gap-3 items-center">
+                    {upgradeImage && (
+                      <div className="w-14 h-14 rounded-xl bg-white overflow-hidden relative flex-shrink-0 border border-sage/15">
+                        <Image
+                          src={upgradeImage}
+                          alt={upgrade.title}
+                          fill
+                          className="object-cover"
+                          sizes="56px"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-charcoal leading-snug">
+                        {upgrade.title}
+                      </p>
+                      <p className="text-xs text-charcoal-light mt-0.5">
+                        einzeln {formatPrice(upgrade.singleSumCents / 100)} · im
+                        Bundle{" "}
+                        <strong className="text-charcoal">
+                          {formatPrice(upgrade.bundlePriceCents / 100)}
+                        </strong>{" "}
+                        ·{" "}
+                        <strong className="text-sage-dark">
+                          du sparst {formatPrice(upgrade.savingsCents / 100)}
+                        </strong>
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => swapToBundle(upgrade.bundleId, upgrade.replaceIds)}
+                    className="mt-3 w-full text-sm font-semibold bg-sage text-white py-2.5 rounded-xl hover:bg-sage-dark transition-colors"
+                  >
+                    Auf Bundle upgraden
+                  </button>
+                  <p className="mt-1.5 text-[10px] text-charcoal-lighter text-center">
+                    Von Ewelina persönlich zusammengestellt.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Einzel-Ergänzung, falls kein Bundle-Upgrade greift */}
+            {items.length > 0 && bump && (
+              <div className="border-t border-lavender/10 px-6 pt-4">
+                <div className="rounded-2xl bg-gold/5 border border-gold/30 p-3">
+                  <p className="flex items-center gap-1.5 text-[11px] font-bold text-gold-dark uppercase tracking-wide">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Das passt dazu
+                  </p>
+                  <div className="mt-2 flex gap-3 items-center">
+                    {bumpImage && (
+                      <div className="w-14 h-14 rounded-xl bg-white overflow-hidden relative flex-shrink-0 border border-gold/20">
+                        <Image
+                          src={bumpImage}
+                          alt={bump.title}
+                          fill
+                          className="object-cover"
+                          sizes="56px"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-charcoal leading-snug">
+                        {bump.title}
+                      </p>
+                      <p className="text-xs text-charcoal-light mt-0.5">
+                        {bump.isDigital ? "Sofort als PDF" : "Passende Ergänzung"}
+                      </p>
+                    </div>
+                    <span className="text-sm font-bold text-charcoal whitespace-nowrap">
+                      +{formatPrice(bump.priceCents / 100)}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => addToCart(bump.productId)}
+                    className="mt-3 w-full flex items-center justify-center gap-1.5 text-sm font-semibold bg-gold-dark text-white py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Dazulegen
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Footer */}
             {items.length > 0 && (

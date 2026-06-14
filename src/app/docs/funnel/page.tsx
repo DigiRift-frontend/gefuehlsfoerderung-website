@@ -196,6 +196,23 @@ export default function FunnelVisualization() {
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <div className="funnel">
+        <div
+          style={{
+            background: "#FDECEC",
+            border: "1px solid #F5C2C0",
+            borderRadius: 14,
+            padding: "14px 18px",
+            marginBottom: 28,
+            color: "#A33B36",
+            fontSize: 13,
+            lineHeight: 1.6,
+          }}
+        >
+          ⚠️ <strong>Veraltet / überholt (Stand 14.06.2026).</strong> Diese
+          Visualisierung enthält Fehler (u.&nbsp;a. Stripe statt Klarna/PayPal,
+          5 statt 3 Leitfäden) und ist nicht der Umsetzungsstand. Aktuelles,
+          korrigiertes Konzept: <code>docs/funnel-upsell-konzept.md</code>.
+        </div>
         <h1>Sales Funnel — Gefühlsförderung</h1>
         <p className="subtitle">Kompletter Upsell-Flow nach DotCom Secrets (Russell Brunson)</p>
 

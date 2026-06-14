@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { blogPosts, getPostBySlug } from "@/lib/blog";
+import { blogPosts, visiblePosts, getPostBySlug } from "@/lib/blog";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import type { Metadata } from "next";
 
@@ -10,7 +10,8 @@ type Props = {
 };
 
 export async function generateStaticParams() {
-  return blogPosts.map((p) => ({ slug: p.slug }));
+  // Entwürfe sind nur lokal (next dev) erreichbar — in Production 404.
+  return visiblePosts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -20,11 +21,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const url = `${SITE_URL}/blog/${post.slug}`;
   const imageUrl = `${SITE_URL}${post.image}`;
+  // Kurzer SEO-Titel fuers <title>-Tag; "absolute" unterdrueckt das " | Gefuehlsfoerderung"-Suffix,
+  // damit der Titel nicht in den Suchergebnissen abgeschnitten wird.
+  const metaTitle = post.seoTitle ?? post.title;
 
   return {
-    title: post.title,
+    title: { absolute: metaTitle },
     description: post.excerpt,
-    keywords: post.categories,
+    keywords: [...(post.keywords ?? []), ...post.categories],
     authors: [{ name: "Ewelina Gawlik", url: `${SITE_URL}/ueber-ewelina` }],
     alternates: {
       canonical: url,
@@ -37,8 +41,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         {
           url: imageUrl,
-          width: 1200,
-          height: 675,
+          width: 1600,
+          height: 900,
           alt: post.title,
         },
       ],
@@ -75,12 +79,18 @@ function BlogPostingJsonLd({ post }: { post: (typeof blogPosts)[number] }) {
       "@type": "Organization",
       name: "Gefühlsförderung",
       url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/images/logo/logo.jpg`,
+        width: 369,
+        height: 77,
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${SITE_URL}/blog/${post.slug}`,
     },
-    keywords: post.categories.join(", "),
+    keywords: [...(post.keywords ?? []), ...post.categories].join(", "),
   };
 
   return (

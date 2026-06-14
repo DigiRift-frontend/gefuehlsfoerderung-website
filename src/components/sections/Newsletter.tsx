@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useNewsletterForm } from "@/lib/useNewsletterForm";
+import { NewsletterCoreOffer } from "@/components/sections/NewsletterCoreOffer";
 
 export function Newsletter() {
   const {
@@ -47,6 +48,9 @@ export function Newsletter() {
                     ? "Schau in dein Postfach und bestätige deine E-Mail-Adresse — erst dann ist deine Anmeldung abgeschlossen."
                     : "Danke, dass du Teil unserer Gemeinschaft bist. Wir freuen uns, dich auf dem Weg der Gefühlsförderung zu begleiten."}
                 </p>
+                <div className="max-w-xl mx-auto">
+                  <NewsletterCoreOffer />
+                </div>
               </div>
             ) : (
               <>
