@@ -13,6 +13,7 @@ import {
   addItem,
   removeItem,
   updateQuantity,
+  swapToBundle as swapToBundleItems,
   getCartTotal,
   getCartCount,
 } from "@/lib/cart";
@@ -22,6 +23,7 @@ type CartContextType = {
   addToCart: (productId: string) => void;
   removeFromCart: (productId: string) => void;
   setQuantity: (productId: string, qty: number) => void;
+  swapToBundle: (bundleId: string, replaceIds: string[]) => void;
   clearCart: () => void;
   cartCount: number;
   cartTotal: number;
@@ -67,6 +69,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setItems((prev) => updateQuantity(prev, productId, qty)),
     []
   );
+  const swapToBundle = useCallback(
+    (bundleId: string, replaceIds: string[]) =>
+      setItems((prev) => swapToBundleItems(prev, bundleId, replaceIds)),
+    []
+  );
   const clearCart = useCallback(() => setItems([]), []);
 
   return (
@@ -76,6 +83,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         addToCart,
         removeFromCart,
         setQuantity,
+        swapToBundle,
         clearCart,
         cartCount: getCartCount(items),
         cartTotal: getCartTotal(items),

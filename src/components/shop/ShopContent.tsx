@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { products, categories } from "@/lib/products";
+import { visibleProducts, categories } from "@/lib/products";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { cn } from "@/lib/utils";
 
@@ -11,8 +11,8 @@ export function ShopContent() {
 
   const filtered =
     activeCategory === "all"
-      ? products
-      : products.filter((p) => p.category === activeCategory);
+      ? visibleProducts
+      : visibleProducts.filter((p) => p.category === activeCategory);
 
   return (
     <section className="py-12 md:py-20">

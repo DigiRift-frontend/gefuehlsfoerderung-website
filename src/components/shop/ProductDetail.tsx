@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/Button";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { formatPrice } from "@/lib/utils";
 import type { Product } from "@/lib/products";
+import { getProductBundlePromo } from "@/lib/order-bump";
 import { useCart } from "@/context/CartContext";
 
 const categoryIcons = {
@@ -70,6 +71,11 @@ export function ProductDetail({
   const Icon = categoryIcons[product.category];
   const color = categoryColors[product.category];
   const { addToCart, setCartOpen } = useCart();
+
+  // Kontextbezogenes Bundle-Banner: zeigt das Flagship-Bundle, das dieses
+  // Produkt enthält (echte Paketpreis-Ersparnis). Bei thematischen
+  // Leitfäden / dem Top-Bundle selbst → null (kein unpassendes Banner).
+  const bundlePromo = getProductBundlePromo(product.id);
 
   function handleAddToCart() {
     if (!product.inStock) return;
@@ -380,25 +386,32 @@ export function ProductDetail({
         </section>
       )}
 
-      {/* Upsell Banner */}
-      <section className="py-12 bg-lavender/5">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="font-heading text-2xl text-charcoal font-bold">
-            Hol dir das komplette Gefühlskompass Bundle!
-          </h3>
-          <p className="mt-2 text-charcoal-light">
-            Kinderbuch + beide Memory-Spiele + Leitfaden &mdash;{" "}
-            <strong className="text-sage-dark">spare über 37%</strong>
-          </p>
-          <Button
-            href="/shop/gefuehlskompass-bundle"
-            variant="primary"
-            className="mt-6"
-          >
-            Zum Bundle (45,99 &euro;)
-          </Button>
-        </div>
-      </section>
+      {/* Bundle-Banner (kontextbezogen, echte Paketpreis-Ersparnis) */}
+      {bundlePromo && (
+        <section className="py-12 bg-lavender/5">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+            <h3 className="font-heading text-2xl text-charcoal font-bold">
+              Mach das Set komplett
+            </h3>
+            <p className="mt-2 text-charcoal-light">
+              Im <strong>{bundlePromo.title}</strong> ist alles zusammen —
+              einzeln {formatPrice(bundlePromo.singleSumCents / 100)}, im Bundle{" "}
+              <strong className="text-sage-dark">
+                {formatPrice(bundlePromo.bundlePriceCents / 100)}
+              </strong>{" "}
+              · du sparst {formatPrice(bundlePromo.savingsCents / 100)}
+            </p>
+            <Button
+              href={`/shop/${bundlePromo.slug}`}
+              variant="primary"
+              className="mt-6"
+            >
+              Zum {bundlePromo.title} (
+              {formatPrice(bundlePromo.bundlePriceCents / 100)})
+            </Button>
+          </div>
+        </section>
+      )}
 
       {/* Lightbox */}
       {lightboxOpen && product.images.length > 0 && (

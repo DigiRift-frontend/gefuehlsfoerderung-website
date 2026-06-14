@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail, Sparkles, Check } from "lucide-react";
 import Link from "next/link";
 import { useNewsletterForm } from "@/lib/useNewsletterForm";
+import { NewsletterCoreOffer } from "@/components/sections/NewsletterCoreOffer";
 
 const variants = {
   default: {
@@ -63,6 +64,9 @@ export function NewsletterCompact({
                 ? "Schau in dein Postfach und bestätige deine E-Mail-Adresse."
                 : "Danke, dass du Teil unserer Gemeinschaft bist."}
             </p>
+            <div className="max-w-xl mx-auto">
+              <NewsletterCoreOffer />
+            </div>
           </div>
         ) : (
           <>

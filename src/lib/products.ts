@@ -16,6 +16,12 @@ export type Product = {
   specs?: { label: string; value: string }[];
   emotions?: string[];
   inStock: boolean;
+  // Bundle-Bestandteile (Einzelprodukt-IDs) — für bundle-aware Order Bumps
+  // ("kein Doppelverkauf") und Upsell-Logik.
+  contains?: string[];
+  // Funnel-exklusive SKU: aus Shop-Listing, Sitemap und statischen Routen
+  // ausgeschlossen, nur über direkte Funnel-Links erreichbar.
+  hidden?: boolean;
 };
 
 export const products: Product[] = [
@@ -143,6 +149,12 @@ export const products: Product[] = [
     originalPrice: 72.88,
     category: "bundle",
     type: "mixed",
+    contains: [
+      "was-fuehlst-du",
+      "emotions-memory-1",
+      "emotions-memory-2",
+      "leitfaden-emotionale-entwicklung",
+    ],
     images: [
       "/images/products/kompass-bundle-cover.jpg",
       "/images/products/kompass-bundle-limited.jpg",
@@ -174,6 +186,7 @@ export const products: Product[] = [
     originalPrice: 33.89,
     category: "bundle",
     type: "mixed",
+    contains: ["was-fuehlst-du", "leitfaden-emotionale-entwicklung"],
     images: [
       "/images/products/bundle-emotionen-entdecken.jpg",
       "/images/products/bundle-gefuehle-detail.jpg",
@@ -286,11 +299,14 @@ export const categories = [
   { id: "bundle", name: "Bundles" },
 ];
 
+// Im Shop/Sitemap sichtbare Produkte (ohne funnel-exklusive SKUs).
+export const visibleProducts: Product[] = products.filter((p) => !p.hidden);
+
 export function getProductBySlug(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
 }
 
 export function getProductsByCategory(category: string): Product[] {
-  if (category === "all") return products;
-  return products.filter((p) => p.category === category);
+  if (category === "all") return visibleProducts;
+  return visibleProducts.filter((p) => p.category === category);
 }
