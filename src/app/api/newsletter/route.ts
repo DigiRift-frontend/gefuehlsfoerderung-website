@@ -1,5 +1,6 @@
 import { dlSubscribe, DIGILETTER_LISTS } from "@/lib/digiletter";
 import { clientIp, rateLimitOk } from "@/lib/rate-limit";
+import { recordEvent } from "@/lib/store";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -51,9 +52,14 @@ export async function POST(request: Request) {
     }
 
     const data = result.data as { status?: string } | undefined;
+    const status = data?.status ?? "pending";
+
+    // Funnel-Tracking (ohne PII — nur Status). Fail-safe.
+    recordEvent("newsletter_submit", { meta: { status } });
+
     return Response.json({
       success: true,
-      status: data?.status ?? "pending", // "pending" = DOI-Mail raus, "confirmed" = war schon bestätigt
+      status, // "pending" = DOI-Mail raus, "confirmed" = war schon bestätigt
     });
   } catch (err) {
     console.error("Newsletter-Anmeldung fehlgeschlagen:", err);

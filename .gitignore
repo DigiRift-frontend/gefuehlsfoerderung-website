@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Funnel-Datastore (Runtime-SQLite, liegt in Prod auf einem Coolify-Volume)
+/private/data/

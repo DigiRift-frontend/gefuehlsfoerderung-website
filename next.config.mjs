@@ -53,6 +53,9 @@ const oldProductSlugs = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
+  // Natives Modul (Funnel-SQLite-Store) nicht ins Server-Bundle ziehen,
+  // sondern zur Laufzeit aus node_modules requiren.
+  serverExternalPackages: ["better-sqlite3"],
   async redirects() {
     return [
       // Blogposts: Root-Ebene → /blog/<slug>

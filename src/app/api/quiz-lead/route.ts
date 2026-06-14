@@ -1,5 +1,6 @@
 import { dlSubscribe, DIGILETTER_LISTS } from "@/lib/digiletter";
 import { clientIp, rateLimitOk } from "@/lib/rate-limit";
+import { recordEvent } from "@/lib/store";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -45,6 +46,12 @@ export async function POST(request: Request) {
       listId: DIGILETTER_LISTS.quiz,
       tags,
       redirectUrl: `${SITE_URL}/newsletter/bestaetigt`,
+    });
+
+    // Funnel-Tracking (ohne PII — nur Ergebnis-Tag + ob E-Mail dabei war).
+    recordEvent("quiz_completed", {
+      ref: VALID_RESULTS.has(result) ? result : undefined,
+      meta: { withEmail: true },
     });
 
     // Das Quiz-Ergebnis wird dem Nutzer unabhängig vom Lead-Versand
